@@ -4,7 +4,7 @@
 @brief This file contains the test cases for the petreminderApp class.
 @details This file includes test methods to validate the functionality of the petreminderApp class. It uses JUnit for unit testing.
 */
-package com.mehdi.ibrahim.zumre.petreminder;
+package com.mehdi.petreminder;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +19,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mehdi.petreminder.petreminderApp;
+
 
 /**
 
@@ -27,7 +29,7 @@ import org.junit.Test;
 @details The petreminderAppTest class provides test methods to verify the behavior of the petreminderApp class. It includes test methods for successful execution, object creation, and error handling scenarios.
 @author ugur.coruh
 */
-public class petreminderAppTest {
+public class PetreminderAppTest {
 
   /**
    * @brief This method is executed once before all test methods.

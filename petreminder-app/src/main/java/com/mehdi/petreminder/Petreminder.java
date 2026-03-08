@@ -10,7 +10,7 @@
 @package com.mehdi.ibrahim.zumre.petreminder
 @brief The com.mehdi.ibrahim.zumre.petreminder package contains all the classes and files related to the petreminder App.
 */
-package com.mehdi.ibrahim.zumre.petreminder;
+package com.mehdi.petreminder;
 
 import org.slf4j.LoggerFactory;
 
@@ -22,28 +22,7 @@ import ch.qos.logback.classic.Logger;
 @details The petreminder class provides methods to perform mathematical operations such as addition, subtraction, multiplication, and division. It also supports logging functionality using the logger object.
 @author ugur.coruh
 */
-public class petreminder {
+public class Petreminder {
 
-  /**
-   * @brief Logger for the petreminder class.
-   */
-  private static final Logger logger = (Logger) LoggerFactory.getLogger(petreminder.class);
 
-  /**
-   * @brief Calculates the sum of two integers.
-   *
-   * @details This function takes two integer values, `a` and `b`, and returns their sum. It also logs a message using the logger object.
-   *
-   * @param a The first integer value.
-   * @param b The second integer value.
-   * @return The sum of `a` and `b`.
-   */
-  public int add(int a, int b) {
-    // Logging an informational message
-    logger.info("Logging message");
-    // Logging an error message
-    logger.error("Error message");
-    // Returning the sum of `a` and `b`
-    return a + b;
-  }
 }

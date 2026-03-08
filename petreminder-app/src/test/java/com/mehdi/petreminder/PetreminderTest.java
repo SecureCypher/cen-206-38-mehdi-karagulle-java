@@ -4,7 +4,7 @@
 @brief This file contains the test cases for the petreminder class.
 @details This file includes test methods to validate the functionality of the petreminder class. It uses JUnit for unit testing.
 */
-package com.mehdi.ibrahim.zumre.petreminder;
+package com.mehdi.petreminder;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.mehdi.petreminder.petreminder;
+
 /**
 
 @class petreminderTest
@@ -21,7 +23,7 @@ import org.junit.Test;
 @details The petreminderTest class provides test methods to verify the behavior of the petreminder class. It includes test methods for addition, subtraction, multiplication, and division operations.
 @author ugur.coruh
 */
-public class petreminderTest {
+public class PetreminderTest {
 
   /**
    * @brief This method is executed once before all test methods.

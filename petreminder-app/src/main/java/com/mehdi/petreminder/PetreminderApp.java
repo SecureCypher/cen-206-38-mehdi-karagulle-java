@@ -9,7 +9,7 @@
 @package com.mehdi.ibrahim.zumre.petreminder
 @brief The com.mehdi.ibrahim.zumre.petreminder package contains all the classes and files related to the petreminder App.
 */
-package com.mehdi.ibrahim.zumre.petreminder;
+package com.mehdi.petreminder;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ import ch.qos.logback.classic.Logger;
  *          and handles exceptions.
  * @author ugur.coruh
  */
-public class petreminderApp {
+public class PetreminderApp {
   /**
    * @brief Logger for the petreminderApp class.
    */
