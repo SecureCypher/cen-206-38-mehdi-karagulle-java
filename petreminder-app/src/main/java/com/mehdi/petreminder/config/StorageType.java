@@ -1,43 +1,53 @@
 /**
  * @file StorageType.java
- * @brief Storage backend türlerini tanımlayan enum.
+ * @brief Storage backend türleri.
  */
 package com.mehdi.petreminder.config;
 
 /**
  * @enum StorageType
  * @brief Desteklenen storage backend türleri.
- * @details PDF zorunluluğu: Binary, SQLite, MySQL — all three required.
- * @author Muhammed Mehdi Karagülle, Ibrahim Demirci, Zumre Uykun
+ * @author Muhammed Mehdi Karagülle
+ * @author Ibrahim Demirci
+ * @author Zumre Uykun
  * @version 1.0
  */
 public enum StorageType {
 
-    /** @brief Binary File I/O — ObjectOutputStream / .bin dosyası. */
-    BINARY("Binary File I/O (.bin)"),
+    /** @brief Binary dosya (.bin) */
+    BINARY("Binary Dosya"),
 
-    /** @brief SQLite — org.xerial:sqlite-jdbc / .db dosyası. */
-    SQLITE("SQLite (.db)"),
+    /** @brief SQLite veritabanı */
+    SQLITE("SQLite"),
 
-    /** @brief MySQL — mysql-connector-j + Docker Compose. */
+    /** @brief MySQL veritabanı (Docker) */
     MYSQL("MySQL (Docker)");
 
-    /** @brief Kullanıcıya gösterilen isim. */
+    /** @brief Kullanıcıya gösterilen ad. */
     private final String displayName;
 
     /**
-     * @brief Enum yapıcısı.
-     * @param displayName Görünen ad
+     * @brief Yapıcı.
+     * @param displayName Gösterim adı
      */
     StorageType(String displayName) {
         this.displayName = displayName;
     }
 
     /**
-     * @brief Görünen adı döndürür.
-     * @return Display name string
+     * @brief Gösterim adını döndürür.
+     * @return displayName
      */
     public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * @brief toString override.
+     * @return displayName
+     */
+    @Override
+    public String toString() {
         return displayName;
     }
 }

@@ -1,28 +1,23 @@
 /**
  * @file StorageConfig.java
- * @brief Storage konfigürasyonu — aktif backend'i yönetir.
- * @details PDF zorunluluğu: Config persisted in .properties file.
- *          RepositoryFactory bu sınıfı okur.
+ * @brief Storage backend konfigürasyonu — runtime switch destekler.
  */
 package com.mehdi.petreminder.config;
 
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 /**
  * @class StorageConfig
- * @brief Storage backend konfigürasyon yöneticisi.
- * @details OOP Encapsulation: static final Properties nesnesi.
- *          PDF zorunluluğu: Config persisted in .properties file so
- *          the choice survives restart.
- *          Singleton pattern: tüm erişim static metodlar üzerinden.
- * @author Muhammed Mehdi Karagülle, Ibrahim Demirci, Zumre Uykun
+ * @brief Aktif storage backend'i yönetir.
+ * @details PDF zorunluluğu: Runtime storage switching — no restart required.
+ *          config/storage.properties dosyasına kaydeder/yükler.
+ * @author Muhammed Mehdi Karagülle
+ * @author Ibrahim Demirci
+ * @author Zumre Uykun
  * @version 1.0
  */
 public class StorageConfig {
@@ -31,132 +26,150 @@ public class StorageConfig {
     private static final Logger logger =
         (Logger) LoggerFactory.getLogger(StorageConfig.class);
 
-    /** @brief Properties dosyası yolu. */
+    /** @brief Config dosyası yolu. */
     private static final String CONFIG_FILE = "config/storage.properties";
 
-    /** @brief Aktif backend property anahtarı. */
-    private static final String KEY_BACKEND = "storage.backend";
+    /** @brief Aktif backend (varsayılan: BINARY). */
+    private static StorageType activeBackend = StorageType.BINARY;
 
-    /** @brief Varsayılan backend. */
-    private static final StorageType DEFAULT_BACKEND = StorageType.BINARY;
+    /** @brief MySQL URL. */
+    private static String mysqlUrl =
+        "jdbc:mysql://localhost:3306/petreminder_db?useSSL=false&serverTimezone=UTC";
 
-    /** @brief In-memory aktif backend (runtime). */
-    private static StorageType activeBackend = DEFAULT_BACKEND;
+    /** @brief MySQL kullanıcı adı. */
+    private static String mysqlUsername = "petreminder_user";
 
-    /** @brief Properties nesnesi. */
-    private static final Properties props = new Properties();
+    /** @brief MySQL şifresi. */
+    private static String mysqlPassword = "petreminder_pass";
 
-    /** @brief Gizli yapıcı — instantiation önlenir. */
-    private StorageConfig() { }
+    /** @brief SQLite dosya yolu. */
+    private static String sqliteFilePath = "data/petreminder.db";
+
+    /** @brief Binary dosya dizini. */
+    private static String binaryDirectory = "data/binary";
 
     static {
         loadFromFile();
     }
 
-    /**
-     * @brief Properties dosyasından konfigürasyonu yükler.
-     * @details Dosya yoksa varsayılan değerlerle devam eder.
-     */
-    public static void loadFromFile() {
-        File configFile = new File(CONFIG_FILE);
-        if (!configFile.exists()) {
-            logger.info("Config dosyasi bulunamadi, varsayilan kullaniliyor: {}",
-                DEFAULT_BACKEND);
-            activeBackend = DEFAULT_BACKEND;
-            return;
-        }
-        try (FileInputStream fis = new FileInputStream(configFile)) {
-            props.load(fis);
-            String backendStr = props.getProperty(KEY_BACKEND,
-                DEFAULT_BACKEND.name());
-            activeBackend = StorageType.valueOf(backendStr.toUpperCase());
-            logger.info("Config yuklendi: {}", activeBackend);
-        } catch (IOException | IllegalArgumentException e) {
-            logger.warn("Config yuklenemedi, varsayilan kullaniliyor: {}", e.getMessage());
-            activeBackend = DEFAULT_BACKEND;
-        }
-    }
+    /** @brief Gizli yapıcı. */
+    private StorageConfig() { }
 
     /**
      * @brief Aktif backend'i döndürür.
-     * @return Aktif StorageType
+     * @return StorageType
      */
     public static StorageType getActiveBackend() {
         return activeBackend;
     }
 
     /**
-     * @brief Aktif backend'i değiştirir ve dosyaya kaydeder.
-     * @details PDF zorunluluğu: no restart required.
+     * @brief Aktif backend'i değiştirir ve kaydeder.
      * @param type Yeni StorageType
      */
     public static void setActiveBackend(StorageType type) {
-        if (type == null) {
-            logger.warn("null StorageType verildi, degistirilmedi.");
-            return;
+        if (type != null) {
+            activeBackend = type;
+            saveToFile();
+            logger.info("Storage backend değiştirildi: {}", type);
         }
-        activeBackend = type;
-        saveToFile();
-        logger.info("Storage backend degistirildi: {}", type);
     }
 
     /**
-     * @brief Konfigürasyonu dosyaya kaydeder.
+     * @brief MySQL URL'ini döndürür.
+     * @return JDBC URL
      */
-    private static void saveToFile() {
-        try {
-            File configDir = new File("config");
-            if (!configDir.exists()) {
-                configDir.mkdirs();
+    public static String getMysqlUrl() { return mysqlUrl; }
+
+    /**
+     * @brief MySQL URL'ini set eder.
+     * @param url JDBC URL
+     */
+    public static void setMysqlUrl(String url) { mysqlUrl = url; }
+
+    /**
+     * @brief MySQL kullanıcı adını döndürür.
+     * @return username
+     */
+    public static String getMysqlUsername() { return mysqlUsername; }
+
+    /**
+     * @brief MySQL şifresini döndürür.
+     * @return password
+     */
+    public static String getMysqlPassword() { return mysqlPassword; }
+
+    /**
+     * @brief SQLite dosya yolunu döndürür.
+     * @return Dosya yolu
+     */
+    public static String getSqliteFilePath() { return sqliteFilePath; }
+
+    /**
+     * @brief Binary dizin yolunu döndürür.
+     * @return Dizin yolu
+     */
+    public static String getBinaryDirectory() { return binaryDirectory; }
+
+    /**
+     * @brief Ayarları properties dosyasından yükler.
+     */
+    public static void loadFromFile() {
+        File file = new File(CONFIG_FILE);
+        if (!file.exists()) {
+            logger.debug("Config dosyası bulunamadı, varsayılanlar kullanılıyor.");
+            return;
+        }
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(file)) {
+            props.load(fis);
+            String backend = props.getProperty("storage.backend", "BINARY");
+            try {
+                activeBackend = StorageType.valueOf(backend.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                activeBackend = StorageType.BINARY;
             }
-            props.setProperty(KEY_BACKEND, activeBackend.name());
-            try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
-                props.store(fos, "Pet Care Reminder System - Storage Config");
-            }
-            logger.debug("Config dosyaya kaydedildi: {}", CONFIG_FILE);
+            mysqlUrl      = props.getProperty("mysql.url", mysqlUrl);
+            mysqlUsername = props.getProperty("mysql.username", mysqlUsername);
+            mysqlPassword = props.getProperty("mysql.password", mysqlPassword);
+            sqliteFilePath = props.getProperty("sqlite.path", sqliteFilePath);
+            binaryDirectory = props.getProperty("binary.dir", binaryDirectory);
+            logger.info("Config yüklendi: backend={}", activeBackend);
+        } catch (IOException e) {
+            logger.warn("Config yüklenemedi: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * @brief Ayarları properties dosyasına kaydeder.
+     */
+    public static void saveToFile() {
+        File dir = new File("config");
+        if (!dir.exists()) dir.mkdirs();
+        Properties props = new Properties();
+        props.setProperty("storage.backend", activeBackend.name());
+        props.setProperty("mysql.url", mysqlUrl);
+        props.setProperty("mysql.username", mysqlUsername);
+        props.setProperty("mysql.password", mysqlPassword);
+        props.setProperty("sqlite.path", sqliteFilePath);
+        props.setProperty("binary.dir", binaryDirectory);
+        try (FileOutputStream fos = new FileOutputStream(CONFIG_FILE)) {
+            props.store(fos, "PetReminder Storage Configuration");
+            logger.debug("Config kaydedildi.");
         } catch (IOException e) {
             logger.warn("Config kaydedilemedi: {}", e.getMessage());
         }
     }
 
     /**
-     * @brief MySQL bağlantı URL'i döndürür.
-     * @return JDBC MySQL URL
+     * @brief Config'i sıfırlar (test için).
      */
-    public static String getMysqlUrl() {
-        return props.getProperty("mysql.url",
-            "jdbc:mysql://localhost:3306/petreminder_db?useSSL=false&allowPublicKeyRetrieval=true");
-    }
-
-    /**
-     * @brief MySQL kullanıcı adı döndürür.
-     * @return Kullanıcı adı
-     */
-    public static String getMysqlUsername() {
-        return props.getProperty("mysql.username", "petreminder_user");
-    }
-
-    /**
-     * @brief MySQL şifresi döndürür.
-     * @return Şifre
-     */
-    public static String getMysqlPassword() {
-        return props.getProperty("mysql.password", "petreminder_pass");
-    }
-
-    /**
-     * @brief SQLite dosya yolunu döndürür.
-     * @return SQLite .db dosya yolu
-     */
-    public static String getSqliteFilePath() {
-        return props.getProperty("sqlite.path", "data/petreminder.db");
-    }
-
-    /**
-     * @brief Binary dosya dizinini döndürür.
-     * @return Binary .bin dosyaları dizini
-     */
-    public static String getBinaryDataPath() {
-        return props.getProperty("binary.path", "data/binary");
+    public static void reset() {
+        activeBackend   = StorageType.BINARY;
+        mysqlUrl        = "jdbc:mysql://localhost:3306/petreminder_db?useSSL=false&serverTimezone=UTC";
+        mysqlUsername   = "petreminder_user";
+        mysqlPassword   = "petreminder_pass";
+        sqliteFilePath  = "data/petreminder.db";
+        binaryDirectory = "data/binary";
     }
 }

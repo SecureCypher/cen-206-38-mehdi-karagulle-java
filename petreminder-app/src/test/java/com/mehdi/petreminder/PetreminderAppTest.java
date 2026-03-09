@@ -1,135 +1,184 @@
 /**
-
-@file petreminderAppTest.java
-@brief This file contains the test cases for the petreminderApp class.
-@details This file includes test methods to validate the functionality of the petreminderApp class. It uses JUnit for unit testing.
-*/
+ * @file petreminderAppTest.java
+ * @brief petreminderApp ana sınıfı için JUnit 5 test sınıfı.
+ * @details PDF zorunluluğu: 100% JUnit5 coverage.
+ *          Template'deki petreminderAppTest.java'nın JUnit5'e uyarlanmış hali.
+ */
 package com.mehdi.petreminder;
 
-import static org.junit.Assert.*;
-
+import com.mehdi.petreminder.config.StorageType;
+import org.junit.jupiter.api.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.mehdi.petreminder.petreminderApp;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * @class petreminderAppTest
+ * @brief petreminderApp sınıfının test sınıfı.
+ * @details JUnit 5 — @Test, @BeforeEach, @AfterEach.
+ *          Template'deki testMainSuccess/testMainObject/testMainError metodları
+ *          JUnit5'e uyarlanmıştır.
+ * @author Muhammed Mehdi Karagülle, Ibrahim Demirci, Zumre Uykun
+ */
+class petreminderAppTest {
 
-@class petreminderAppTest
-@brief This class represents the test class for the petreminderApp class.
-@details The petreminderAppTest class provides test methods to verify the behavior of the petreminderApp class. It includes test methods for successful execution, object creation, and error handling scenarios.
-@author ugur.coruh
-*/
-public class PetreminderAppTest {
+    /** @brief Orijinal System.in. */
+    private InputStream originalIn;
+    /** @brief Orijinal System.out. */
+    private PrintStream originalOut;
 
-  /**
-   * @brief This method is executed once before all test methods.
-   * @throws Exception
-   */
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-  }
+    /**
+     * @brief Her testten önce stream'ler saklanır.
+     */
+    @BeforeEach
+    void setUp() {
+        originalIn  = System.in;
+        originalOut = System.out;
+    }
 
-  /**
-   * @brief This method is executed once after all test methods.
-   * @throws Exception
-   */
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
+    /**
+     * @brief Her testten sonra stream'ler geri yüklenir.
+     */
+    @AfterEach
+    void tearDown() {
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+    }
 
-  /**
-   * @brief This method is executed before each test method.
-   * @throws Exception
-   */
-  @Before
-  public void setUp() throws Exception {
-  }
+    // ── parseStorageArg testleri ──────────────────────────────────────
 
-  /**
-   * @brief This method is executed after each test method.
-   * @throws Exception
-   */
-  @After
-  public void tearDown() throws Exception {
-  }
+    /** @brief null args → BINARY döner. */
+    @Test void testParseStorageArgNull() {
+        assertEquals(StorageType.BINARY, petreminderApp.parseStorageArg(null));
+    }
 
-  /**
-   * @brief Test method to validate the successful execution of the main method.
-   *
-   * @details This method redirects the System.in and System.out streams to simulate user input and capture the output. It calls the main method of petreminderApp with a valid argument and asserts the expected behavior based on the output.
-   */
-  @Test
-  public void testMainSuccess() {
-    // Redirect System.in and System.out
-    InputStream originalIn = System.in;
-    PrintStream originalOut = System.out;
-    // Create a ByteArrayInputStream with the desired input
-    String input = System.lineSeparator(); // Pressing "Enter" key
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-    // Redirect System.in to the ByteArrayInputStream
-    System.setIn(inputStream);
-    // Create a ByteArrayOutputStream to capture the output
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    System.setOut(new PrintStream(outputStream));
-    String[] args = new String[] {"0"};
-    // Call the main method of petreminderApp
-    petreminderApp.main(args);
-    // Restore original System.in and System.out
-    System.setIn(originalIn);
-    System.setOut(originalOut);
-    // Assert the desired behavior based on the output
-    assertTrue(true);
-  }
+    /** @brief Boş args → BINARY döner. */
+    @Test void testParseStorageArgEmpty() {
+        assertEquals(StorageType.BINARY,
+            petreminderApp.parseStorageArg(new String[]{}));
+    }
 
-  /**
-   * @brief Test method to validate the object creation of petreminderApp.
-   *
-   * @details This method creates an instance of the petreminderApp class and asserts the successful creation of the object.
-   */
-  @Test
-  public void testMainObject() {
-    // Creating an instance of petreminderApp
-    petreminderApp app = new petreminderApp();
-    // Asserting the successful creation of the object
-    assertTrue(true);
-  }
+    /** @brief "--storage=binary" → BINARY döner. */
+    @Test void testParseStorageArgBinary() {
+        assertEquals(StorageType.BINARY,
+            petreminderApp.parseStorageArg(new String[]{"--storage=binary"}));
+    }
 
-  /**
-   * @brief Test method to validate the error handling of the main method.
-   *
-   * @details This method redirects the System.in and System.out streams to simulate user input and capture the output. It calls the main method of petreminderApp with an invalid argument and asserts the expected behavior based on the output.
-   */
-  @Test
-  public void testMainError() {
-    // Redirect System.in and System.out
-    InputStream originalIn = System.in;
-    PrintStream originalOut = System.out;
-    // Create a ByteArrayInputStream with the desired input
-    String input = System.lineSeparator(); // Pressing "Enter" key
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-    // Redirect System.in to the ByteArrayInputStream
-    System.setIn(inputStream);
-    // Create a ByteArrayOutputStream to capture the output
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    System.setOut(new PrintStream(outputStream));
-    String[] args = new String[] {"1"};
-    // Call the main method of petreminderApp
-    petreminderApp.main(args);
-    // Restore original System.in and System.out
-    System.setIn(originalIn);
-    System.setOut(originalOut);
-    // Assert the desired behavior based on the output
-    assertTrue(true);
-  }
+    /** @brief "--storage=sqlite" → SQLITE döner. */
+    @Test void testParseStorageArgSqlite() {
+        assertEquals(StorageType.SQLITE,
+            petreminderApp.parseStorageArg(new String[]{"--storage=sqlite"}));
+    }
 
+    /** @brief "--storage=mysql" → MYSQL döner. */
+    @Test void testParseStorageArgMysql() {
+        assertEquals(StorageType.MYSQL,
+            petreminderApp.parseStorageArg(new String[]{"--storage=mysql"}));
+    }
+
+    /** @brief Büyük/küçük harf farkı yok — "SQLITE" → SQLITE. */
+    @Test void testParseStorageArgUpperCase() {
+        assertEquals(StorageType.SQLITE,
+            petreminderApp.parseStorageArg(new String[]{"--storage=SQLITE"}));
+    }
+
+    /** @brief Geçersiz değer → BINARY döner. */
+    @Test void testParseStorageArgInvalid() {
+        assertEquals(StorageType.BINARY,
+            petreminderApp.parseStorageArg(new String[]{"--storage=unknown"}));
+    }
+
+    /** @brief İlgisiz argüman → BINARY döner. */
+    @Test void testParseStorageArgIrrelevant() {
+        assertEquals(StorageType.BINARY,
+            petreminderApp.parseStorageArg(new String[]{"--verbose"}));
+    }
+
+    /** @brief null argüman içeren dizi → BINARY döner. */
+    @Test void testParseStorageArgNullElement() {
+        assertEquals(StorageType.BINARY,
+            petreminderApp.parseStorageArg(new String[]{null}));
+    }
+
+    // ── Statik alanlar ────────────────────────────────────────────────
+
+    /** @brief APP_NAME boş değil. */
+    @Test void testAppNameNotNull() {
+        assertNotNull(petreminderApp.APP_NAME);
+        assertFalse(petreminderApp.APP_NAME.isEmpty());
+    }
+
+    /** @brief APP_VERSION boş değil. */
+    @Test void testAppVersionNotNull() {
+        assertNotNull(petreminderApp.APP_VERSION);
+        assertFalse(petreminderApp.APP_VERSION.isEmpty());
+    }
+
+    /** @brief getVersion() APP_VERSION döndürür. */
+    @Test void testGetVersion() {
+        assertEquals(petreminderApp.APP_VERSION, petreminderApp.getVersion());
+    }
+
+    /** @brief getAppName() APP_NAME döndürür. */
+    @Test void testGetAppName() {
+        assertEquals(petreminderApp.APP_NAME, petreminderApp.getAppName());
+    }
+
+    // ── main() testleri (template uyumu) ─────────────────────────────
+
+    /**
+     * @brief main() başarıyla çalışır — "0" (çıkış) argümanı verilir.
+     * @details Template'deki testMainSuccess metodunun JUnit5 karşılığı.
+     */
+    @Test void testMainSuccess() {
+        // "0" girişi → ConsoleApp hemen çıkış yapar
+        String input = "0" + System.lineSeparator();
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        assertDoesNotThrow(() ->
+            petreminderApp.main(new String[]{"--storage=binary"})
+        );
+    }
+
+    /**
+     * @brief main() storage=sqlite ile çalışır.
+     */
+    @Test void testMainSqlite() {
+        String input = "0" + System.lineSeparator();
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        System.setOut(new PrintStream(new ByteArrayOutputStream()));
+        assertDoesNotThrow(() ->
+            petreminderApp.main(new String[]{"--storage=sqlite"})
+        );
+    }
+
+    /**
+     * @brief main() argümansız çalışır.
+     * @details Template'deki testMainObject metodunun karşılığı.
+     */
+    @Test void testMainNoArgs() {
+        String input = "0" + System.lineSeparator();
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        System.setOut(new PrintStream(new ByteArrayOutputStream()));
+        assertDoesNotThrow(() ->
+            petreminderApp.main(new String[]{})
+        );
+    }
+
+    /**
+     * @brief main() geçersiz storage ile çalışır — BINARY'e düşer.
+     * @details Template'deki testMainError metodunun karşılığı.
+     */
+    @Test void testMainInvalidStorage() {
+        String input = "0" + System.lineSeparator();
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        System.setOut(new PrintStream(new ByteArrayOutputStream()));
+        assertDoesNotThrow(() ->
+            petreminderApp.main(new String[]{"--storage=gecersiz"})
+        );
+    }
 }
