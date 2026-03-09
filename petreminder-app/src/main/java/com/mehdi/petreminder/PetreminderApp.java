@@ -1,80 +1,132 @@
 /**
+ * @file petreminderApp.java
+ * @brief Pet Care Reminder System ana uygulama giriş noktası.
+ * @details Bu dosya uygulamanın main() metodunu içerir.
+ *          Console menüsünü başlatır, storage backend'i yapılandırır.
+ *          PDF gereksinimi: Console-based menu with keyboard navigation.
+ */
 
-@file petreminderApp.java
-@brief This file serves as the main application file for the petreminder App.
-@details This file contains the entry point of the application, which is the main method. It initializes the necessary components and executes the petreminder App.
-*/
 /**
-
-@package com.mehdi.ibrahim.zumre.petreminder
-@brief The com.mehdi.ibrahim.zumre.petreminder package contains all the classes and files related to the petreminder App.
-*/
+ * @package com.mehdi.ibrahim.zumre.petreminder
+ * @brief Ana uygulama paketi — Pet Care Reminder System.
+ */
 package com.mehdi.petreminder;
 
-import java.io.IOException;
+import com.mehdi.petreminder.config.StorageConfig;
+import com.mehdi.petreminder.config.StorageType;
 
 import org.slf4j.LoggerFactory;
-
 import ch.qos.logback.classic.Logger;
 
 /**
- *
  * @class petreminderApp
- * @brief This class represents the main application class for the petreminder
- *        App.
- * @details The petreminderApp class provides the entry point for the petreminder
- *          App. It initializes the necessary components, performs calculations,
- *          and handles exceptions.
- * @author ugur.coruh
+ * @brief Pet Care Reminder System ana sınıfı.
+ * @details PDF gereksinimi: Modular Architecture - app layer calls lib layer.
+ *          OOP Encapsulation: logger private static final.
+ *          OOP Abstraction: ConsoleApp soyutlaması üzerinden çalışır.
+ * @author Muhammed Mehdi Karagülle
+ * @author Ibrahim Demirci
+ * @author Zumre Uykun
+ * @version 1.0
+ * @date 2026-03-27
  */
 public class PetreminderApp {
-  /**
-   * @brief Logger for the petreminderApp class.
-   */
-  private static final Logger logger = (Logger) LoggerFactory.getLogger(petreminderApp.class);
 
-  /**
-   * @brief The main entry point of the petreminder App.
-   *
-   * @details The main method is the starting point of the petreminder App. It
-   *          initializes the logger, performs logging, displays a greeting
-   *          message, and handles user input.
-   *
-   * @param args The command-line arguments passed to the application.
-   */
-  public static void main(String[] args) {
-    // Logging messages for informational purposes
-    logger.info("Logging message");
-    // Logging an error message
-    logger.error("Error message");
-    // Displaying a greeting message
-    System.out.println("Hello World!");
+    /**
+     * @brief Uygulama logger'ı.
+     * @details SLF4J + Logback — logback.xml ile yapılandırılır.
+     */
+    private static final Logger logger =
+        (Logger) LoggerFactory.getLogger(PetreminderApp.class);
 
-    try {
-      // Checking if command-line arguments are provided
-      if (args != null) {
-        // Checking if there are any arguments
-        if (args.length > 0) {
-          // Checking if the first argument is "1"
-          if (args[0].equals("1")) {
-            // Throwing a dummy IOException
-            throw new IOException("Dummy Exception...");
-          }
+    /**
+     * @brief Uygulama adı sabiti.
+     */
+    public static final String APP_NAME = "Pet Care Reminder System";
+
+    /**
+     * @brief Uygulama versiyonu.
+     */
+    public static final String APP_VERSION = "1.0.0";
+
+    /**
+     * @brief Pet Care Reminder System ana giriş noktası.
+     * @details PDF gereksinimi:
+     *          - Storage backend komut satırından seçilebilir (--storage=binary|sqlite|mysql)
+     *          - Varsayılan: BINARY
+     *          - ConsoleApp başlatılır; menü yönetimi orada yapılır.
+     * @param args Komut satırı argümanları.
+     *             --storage=binary  → Binary File I/O
+     *             --storage=sqlite  → SQLite JDBC
+     *             --storage=mysql   → MySQL (Docker Compose gerekli)
+     */
+    public static void main(String[] args) {
+    	System.out.println("PROGRAM BASLADI"); // bu görünüyor mu?
+        logger.info("{} v{} baslatiliyor...", APP_NAME, APP_VERSION);
+        System.out.println("==========================================");
+        System.out.println("  " + APP_NAME + " v" + APP_VERSION);
+        System.out.println("  CEN206 - OOP Term Project - Spring 2026");
+        System.out.println("  RTEU Computer Engineering");
+        System.out.println("==========================================");
+
+        // Komut satırı argümanlarından storage tipini oku
+        StorageType storageType = parseStorageArg(args);
+        StorageConfig.setActiveBackend(storageType);
+        logger.info("Storage backend: {}", storageType);
+        System.out.println("Storage: " + storageType.getDisplayName());
+        System.out.println();
+
+        // Console uygulamasını başlat
+        try {
+            ConsoleApp consoleApp = new ConsoleApp();
+            consoleApp.start();
+        } catch (Exception e) {
+            logger.error("Uygulama hatasi: {}", e.getMessage(), e);
+            System.err.println("Kritik hata: " + e.getMessage());
+            System.exit(1);
         }
-      }
 
-      // Prompting the user to press Enter to continue
-      System.out.println("Press Enter to Continue...");
-      // Reading user input from the console
-      System.in.read();
-      // Displaying a closing message
-      System.out.println("Thank you...");
-    } catch (IOException e) {
-      // Logging the exception
-      logger.error(e.toString());
-      // Printing the exception stack trace
-      e.printStackTrace();
+        logger.info("Uygulama kapatildi.");
     }
-  }
 
+    /**
+     * @brief Komut satırı argümanlarından storage tipini ayrıştırır.
+     * @details --storage=binary|sqlite|mysql formatını destekler.
+     *          Geçersiz/eksik argüman durumunda BINARY döner.
+     * @param args Komut satırı argümanları
+     * @return Seçilen StorageType (varsayılan: BINARY)
+     */
+    public static StorageType parseStorageArg(String[] args) {
+        if (args == null || args.length == 0) {
+            return StorageType.BINARY;
+        }
+        for (String arg : args) {
+            if (arg != null && arg.startsWith("--storage=")) {
+                String value = arg.substring("--storage=".length()).trim().toUpperCase();
+                try {
+                    return StorageType.valueOf(value);
+                } catch (IllegalArgumentException e) {
+                    logger.warn("Gecersiz storage tipi: {}. BINARY kullaniliyor.", value);
+                    return StorageType.BINARY;
+                }
+            }
+        }
+        return StorageType.BINARY;
+    }
+
+    /**
+     * @brief Uygulama versiyonunu döndürür.
+     * @return Versiyon string'i
+     */
+    public static String getVersion() {
+        return APP_VERSION;
+    }
+
+    /**
+     * @brief Uygulama adını döndürür.
+     * @return Uygulama adı
+     */
+    public static String getAppName() {
+        return APP_NAME;
+    }
 }

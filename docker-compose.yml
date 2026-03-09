@@ -1,0 +1,35 @@
+# @file docker-compose.yml
+# @brief MySQL backend için Docker Compose konfigürasyonu.
+# @details PDF zorunluluğu: MySqlRepository için Docker Compose.
+#          Kullanım: docker compose up -d
+#          Durdurma: docker compose down
+#          Veri kalıcılığı: mysql_data volume ile sağlanır.
+
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: petreminder_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: petreminder_root
+      MYSQL_DATABASE: petreminder_db
+      MYSQL_USER: petreminder_user
+      MYSQL_PASSWORD: petreminder_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost",
+             "-u", "petreminder_user", "-ppetreminder_pass"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mysql_data:
+    driver: local
