@@ -80,7 +80,7 @@ public class petreminder {
      * @brief İki tamsayıyı çarpar.
      * @param a Birinci sayı
      * @param b İkinci sayı
-     * @return Çarpım
+     * @return Çarpım 
      */
     public int multiply(int a, int b) {
         logger.debug("multiply({}, {})", a, b);

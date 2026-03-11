@@ -118,7 +118,13 @@ public abstract class SqliteRepository<T> implements IRepository<T> {
      */
     protected void createTableIfNotExists() {
         try (Statement st = connection.createStatement()) {
-            st.execute(getCreateTableSql());
+            String sql = getCreateTableSql();
+            // H2 does not support SQLite's AUTOINCREMENT; use AUTO_INCREMENT instead
+            String dbProduct = connection.getMetaData().getDatabaseProductName();
+            if ("H2".equalsIgnoreCase(dbProduct)) {
+                sql = sql.replace("AUTOINCREMENT", "AUTO_INCREMENT");
+            }
+            st.execute(sql);
         } catch (SQLException e) {
             throw new RepositoryException("Tablo oluşturma hatası", e);
         }

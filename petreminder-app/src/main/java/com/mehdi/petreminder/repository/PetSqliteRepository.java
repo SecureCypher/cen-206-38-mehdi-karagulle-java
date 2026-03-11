@@ -120,12 +120,12 @@ public class PetSqliteRepository extends SqliteRepository<Pet> {
         int ownerId = rs.getInt("owner_id");
 
         Pet pet;
-        if ("Dog".equalsIgnoreCase(species)) {
+        if ("Dog".equalsIgnoreCase(species) || "Kopek".equalsIgnoreCase(species)) {
             Dog dog = new Dog(id, name, birthDate, ownerId);
             dog.setBreed(rs.getString("breed"));
             dog.setTrained(rs.getInt("is_trained") == 1);
             pet = dog;
-        } else if ("Cat".equalsIgnoreCase(species)) {
+        } else if ("Cat".equalsIgnoreCase(species) || "Kedi".equalsIgnoreCase(species)) {
             Cat cat = new Cat(id, name, birthDate, ownerId);
             cat.setBreed(rs.getString("breed"));
             cat.setIndoor(rs.getInt("is_indoor") == 1);

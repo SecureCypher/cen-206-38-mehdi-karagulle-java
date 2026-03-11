@@ -87,8 +87,8 @@ class StorageConfigTest {
         assertNotNull(StorageConfig.getSqliteFilePath());
     }
 
-    @Test void testGetBinaryDataPathNotNull() {
-        assertNotNull(StorageConfig.getBinaryDataPath());
+    @Test void testGetBinaryDirectoryNotNull() {
+        assertNotNull(StorageConfig.getBinaryDirectory());
     }
 
     @Test void testLoadFromFileNoException() {

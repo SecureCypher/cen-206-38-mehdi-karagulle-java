@@ -142,10 +142,25 @@ public class RemindersPanel extends JPanel {
 
     private void completeSelected() {
         int row = table.getSelectedRow();
-        if (row < 0) return;
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Lütfen bir hatırlatıcı seçin.");
+            return;
+        }
         int id = (int) tableModel.getValueAt(row, 0);
-        reminderService.markCompleted(id);
-        refresh();
+        String currentStatus = (String) tableModel.getValueAt(row, 5);
+        if (currentStatus != null && currentStatus.contains("Tamamlandı")) {
+            JOptionPane.showMessageDialog(this, "Bu hatırlatıcı zaten tamamlandı.");
+            return;
+        }
+        try {
+            reminderService.markCompleted(id);
+            refresh();
+            JOptionPane.showMessageDialog(this, "Hatırlatıcı tamamlandı olarak işaretlendi!",
+                "Başarılı", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage(),
+                "Hata", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void deleteSelected() {

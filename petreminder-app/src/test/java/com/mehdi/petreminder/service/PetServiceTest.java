@@ -160,7 +160,7 @@ class PetServiceTest {
             new Cat(2, "Boncuk", null, 1)
         );
         when(mockRepo.findAll()).thenReturn(all);
-        List<Pet> dogs = service.filterBySpecies("Dog");
+        List<Pet> dogs = service.filterBySpecies("Kopek");
         assertEquals(1, dogs.size());
         assertInstanceOf(Dog.class, dogs.get(0));
     }

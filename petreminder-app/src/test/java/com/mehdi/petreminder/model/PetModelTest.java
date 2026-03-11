@@ -1,13 +1,13 @@
 /**
  * @file PetModelTest.java
- * @brief Pet, Dog, Cat, Bird model siniflari icin JUnit 4 test dosyasi.
+ * @brief Pet, Dog, Cat, Bird model siniflari icin JUnit 5 test dosyasi.
  * @details Tum getter/setter, makeSound, getAge, equals, hashCode,
  *          toString metodlarini test eder. JaCoCo %100 coverage hedeflenir.
  */
 package com.mehdi.petreminder.model;
 
-import static org.junit.Assert.*;
-import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
 import java.time.LocalDate;
 
 /**
@@ -15,15 +15,15 @@ import java.time.LocalDate;
  * @brief Pet hiyerarsisi icin birim test sinifi.
  * @author Muhammed Mehdi Karagulle, Ibrahim Demirci, Zumre Uykun
  */
-public class PetModelTest {
+class PetModelTest {
 
     private Dog dog;
     private Cat cat;
     private Bird bird;
 
     /** @brief Her testten once calisir. */
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         dog  = new Dog(1, "Karamel", LocalDate.of(2021, 5, 10), 1);
         cat  = new Cat(2, "Pamuk",   LocalDate.of(2020, 3, 15), 1);
         bird = new Bird(3, "Cici",   LocalDate.of(2022, 7, 20), 1);
