@@ -129,7 +129,8 @@ public class petreminderApp {
         if (args == null || args.length == 0) return StorageType.BINARY;
         for (String arg : args) {
             if (arg != null && arg.startsWith("--storage=")) {
-                String value = arg.substring("--storage=".length()).trim().toUpperCase();
+                String value = arg.substring("--storage=".length())
+                    .trim().toUpperCase(java.util.Locale.ROOT);
                 try {
                     return StorageType.valueOf(value);
                 } catch (IllegalArgumentException e) {

@@ -6,6 +6,7 @@
  */
 package com.mehdi.petreminder;
 
+import com.mehdi.petreminder.config.StorageConfig;
 import com.mehdi.petreminder.config.StorageType;
 import org.junit.jupiter.api.*;
 import java.io.ByteArrayInputStream;
@@ -30,12 +31,13 @@ class petreminderAppTest {
     private PrintStream originalOut;
 
     /**
-     * @brief Her testten önce stream'ler saklanır.
+     * @brief Her testten önce stream'ler saklanır ve StorageConfig sıfırlanır.
      */
     @BeforeEach
     void setUp() {
         originalIn  = System.in;
         originalOut = System.out;
+        StorageConfig.reset();
     }
 
     /**
@@ -45,6 +47,7 @@ class petreminderAppTest {
     void tearDown() {
         System.setIn(originalIn);
         System.setOut(originalOut);
+        StorageConfig.reset();
     }
 
     // ── parseStorageArg testleri ──────────────────────────────────────
@@ -100,6 +103,33 @@ class petreminderAppTest {
     @Test void testParseStorageArgNullElement() {
         assertEquals(StorageType.BINARY,
             petreminderApp.parseStorageArg(new String[]{null}));
+    }
+
+    // ── isGuiRequested testleri ───────────────────────────────────────
+
+    /** @brief null args → false. */
+    @Test void testIsGuiRequestedNull() {
+        assertFalse(petreminderApp.isGuiRequested(null));
+    }
+
+    /** @brief Boş args → false. */
+    @Test void testIsGuiRequestedEmpty() {
+        assertFalse(petreminderApp.isGuiRequested(new String[]{}));
+    }
+
+    /** @brief "--gui" → true. */
+    @Test void testIsGuiRequestedTrue() {
+        assertTrue(petreminderApp.isGuiRequested(new String[]{"--gui"}));
+    }
+
+    /** @brief "--GUI" büyük harf → true. */
+    @Test void testIsGuiRequestedUpperCase() {
+        assertTrue(petreminderApp.isGuiRequested(new String[]{"--GUI"}));
+    }
+
+    /** @brief İlgisiz argüman → false. */
+    @Test void testIsGuiRequestedIrrelevant() {
+        assertFalse(petreminderApp.isGuiRequested(new String[]{"--verbose"}));
     }
 
     // ── Statik alanlar ────────────────────────────────────────────────
@@ -179,6 +209,18 @@ class petreminderAppTest {
         System.setOut(new PrintStream(new ByteArrayOutputStream()));
         assertDoesNotThrow(() ->
             petreminderApp.main(new String[]{"--storage=gecersiz"})
+        );
+    }
+
+    /**
+     * @brief startConsole() testi.
+     */
+    @Test void testStartConsole() {
+        String input = "0" + System.lineSeparator();
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        System.setOut(new PrintStream(new ByteArrayOutputStream()));
+        assertDoesNotThrow(() ->
+            petreminderApp.startConsole(new String[]{})
         );
     }
 }
