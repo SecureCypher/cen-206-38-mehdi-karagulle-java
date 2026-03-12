@@ -1,10 +1,13 @@
 /**
  * @file ReminderService.java
  * @brief Reminder iş mantığı servis katmanı.
+ * @details Observer Pattern: CRUD işlemlerinde EventManager'a bildirim gönderir.
  */
 package com.mehdi.petreminder.service;
 
 import com.mehdi.petreminder.model.Reminder;
+import com.mehdi.petreminder.observer.EventManager;
+import com.mehdi.petreminder.observer.EventType;
 import com.mehdi.petreminder.repository.IRepository;
 import com.mehdi.petreminder.repository.RepositoryFactory;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,10 @@ import java.util.stream.Collectors;
 /**
  * @class ReminderService
  * @brief Reminder CRUD ve iş kuralları.
+ * @details Observer Pattern: Reminder eklendiğinde, tamamlandığında veya
+ *          silindiğinde EventManager üzerinden kayıtlı observer'lara
+ *          bildirim gönderilir. Böylece Dashboard gibi bileşenler
+ *          otomatik güncellenir.
  * @author Muhammed Mehdi Karagülle
  * @author Ibrahim Demirci
  * @author Zumre Uykun
@@ -56,6 +63,8 @@ public class ReminderService {
         validateReminder(reminder);
         int id = repository.save(reminder);
         logger.info("Reminder eklendi: id={}, type={}", id, reminder.getReminderType());
+        // Observer Pattern: Reminder eklendi bildirimi
+        EventManager.getInstance().notify(EventType.REMINDER_ADDED, reminder);
         return reminder;
     }
 
@@ -119,6 +128,8 @@ public class ReminderService {
         r.setCompleted(true);
         repository.update(r);
         logger.info("Reminder tamamlandı: id={}", id);
+        // Observer Pattern: Reminder tamamlandı bildirimi
+        EventManager.getInstance().notify(EventType.REMINDER_COMPLETED, r);
     }
 
     /**
@@ -143,6 +154,8 @@ public class ReminderService {
             throw new ServiceException("Reminder silinemedi: id=" + id);
         }
         logger.info("Reminder silindi: id={}", id);
+        // Observer Pattern: Reminder silindi bildirimi
+        EventManager.getInstance().notify(EventType.REMINDER_DELETED, id);
     }
 
     /**

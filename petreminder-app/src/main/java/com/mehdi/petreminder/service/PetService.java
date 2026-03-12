@@ -2,10 +2,13 @@
  * @file PetService.java
  * @brief Pet iş mantığı servis katmanı.
  * @details Repository üzerinde iş kuralları uygular.
+ *          Observer Pattern: CRUD işlemlerinde EventManager'a bildirim gönderir.
  */
 package com.mehdi.petreminder.service;
 
 import com.mehdi.petreminder.model.*;
+import com.mehdi.petreminder.observer.EventManager;
+import com.mehdi.petreminder.observer.EventType;
 import com.mehdi.petreminder.repository.IRepository;
 import com.mehdi.petreminder.repository.RepositoryFactory;
 import org.slf4j.LoggerFactory;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
  * @brief Pet CRUD iş mantığı katmanı.
  * @details OOP Composition: IRepository bağımlılığı constructor injection ile.
  *          PDF zorunluluğu: Service layer — business logic ayrılır.
+ *          Observer Pattern: Her CRUD işleminde EventManager üzerinden
+ *          kayıtlı observer'lara bildirim gönderilir.
  * @author Muhammed Mehdi Karagülle
  * @author Ibrahim Demirci
  * @author Zumre Uykun
@@ -59,6 +64,8 @@ public class PetService {
         validatePet(pet);
         int id = repository.save(pet);
         logger.info("Pet eklendi: id={}, name={}", id, pet.getName());
+        // Observer Pattern: Pet eklendi bildirimi
+        EventManager.getInstance().notify(EventType.PET_ADDED, pet);
         return pet;
     }
 
@@ -93,6 +100,8 @@ public class PetService {
             throw new ServiceException("Pet güncellenemedi: id=" + pet.getId());
         }
         logger.info("Pet güncellendi: id={}", pet.getId());
+        // Observer Pattern: Pet güncellendi bildirimi
+        EventManager.getInstance().notify(EventType.PET_UPDATED, pet);
     }
 
     /**
@@ -106,6 +115,8 @@ public class PetService {
             throw new ServiceException("Pet silinemedi: id=" + id);
         }
         logger.info("Pet silindi: id={}", id);
+        // Observer Pattern: Pet silindi bildirimi
+        EventManager.getInstance().notify(EventType.PET_DELETED, id);
     }
 
     /**

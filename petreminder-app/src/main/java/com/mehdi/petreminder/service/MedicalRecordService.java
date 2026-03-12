@@ -1,10 +1,13 @@
 /**
  * @file MedicalRecordService.java
  * @brief Sağlık kayıtları servis katmanı.
+ * @details Observer Pattern: CRUD işlemlerinde EventManager'a bildirim gönderir.
  */
 package com.mehdi.petreminder.service;
 
 import com.mehdi.petreminder.model.MedicalRecord;
+import com.mehdi.petreminder.observer.EventManager;
+import com.mehdi.petreminder.observer.EventType;
 import com.mehdi.petreminder.repository.IRepository;
 import com.mehdi.petreminder.repository.RepositoryFactory;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 /**
  * @class MedicalRecordService
  * @brief MedicalRecord CRUD ve iş kuralları.
+ * @details Observer Pattern: Kayıt eklendiğinde veya silindiğinde
+ *          EventManager üzerinden bildirim gönderilir.
  * @author Muhammed Mehdi Karagülle
  * @author Ibrahim Demirci
  * @author Zumre Uykun
@@ -54,6 +59,8 @@ public class MedicalRecordService {
         validateRecord(record);
         repository.save(record);
         logger.info("MedicalRecord eklendi: petId={}", record.getPetId());
+        // Observer Pattern: Saglik kaydi eklendi bildirimi
+        EventManager.getInstance().notify(EventType.MEDICAL_RECORD_ADDED, record);
         return record;
     }
 
@@ -107,6 +114,8 @@ public class MedicalRecordService {
         boolean deleted = repository.delete(id);
         if (!deleted) throw new ServiceException("Kayıt silinemedi: id=" + id);
         logger.info("MedicalRecord silindi: id={}", id);
+        // Observer Pattern: Saglik kaydi silindi bildirimi
+        EventManager.getInstance().notify(EventType.MEDICAL_RECORD_DELETED, id);
     }
 
     /**
