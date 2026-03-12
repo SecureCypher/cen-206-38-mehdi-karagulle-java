@@ -1,0 +1,48 @@
+@startuml PetReminderERDiagram
+
+entity "users" {
+  * id : INTEGER <<PK>>
+  --
+  username : VARCHAR(50)
+  password_hash : VARCHAR(255)
+  email : VARCHAR(100)
+}
+
+entity "pets" {
+  * id : INTEGER <<PK>>
+  --
+  owner_id : INTEGER <<FK>>
+  name : VARCHAR(100)
+  species : VARCHAR(50)
+  breed : VARCHAR(100)
+  birth_date : DATE
+  weight : REAL
+}
+
+entity "reminders" {
+  * id : INTEGER <<PK>>
+  --
+  pet_id : INTEGER <<FK>>
+  type : VARCHAR(50)
+  scheduled_time : DATETIME
+  completed : BOOLEAN
+  description : TEXT
+  priority : VARCHAR(20)
+  <<other specific columns>> : MIXED
+}
+
+entity "medical_records" {
+  * id : INTEGER <<PK>>
+  --
+  pet_id : INTEGER <<FK>>
+  record_date : DATE
+  record_type : VARCHAR(50)
+  diagnosis : VARCHAR(255)
+  treatment : TEXT
+}
+
+users ||--o{ pets : "owns"
+pets ||--o{ reminders : "has"
+pets ||--o{ medical_records : "has history"
+
+@enduml

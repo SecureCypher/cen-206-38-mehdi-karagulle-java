@@ -1,0 +1,88 @@
+@startuml PetReminderClassDiagram
+skinparam classAttributeIconSize 0
+
+package "com.mehdi.petreminder.model" {
+    abstract class Pet {
+        - id: int
+        - name: String
+        - species: String
+        - birthDate: LocalDate
+        - ownerId: int
+        + {abstract} makeSound(): String
+    }
+    class Dog extends Pet
+    class Cat extends Pet
+    class Bird extends Pet
+
+    abstract class Reminder {
+        - id: int
+        - petId: int
+        - scheduledTime: LocalDateTime
+        - completed: boolean
+        + {abstract} validate(): boolean
+        + {abstract} getReminderType(): String
+    }
+    class FeedingReminder extends Reminder
+    class MedicationReminder extends Reminder
+    class VetAppointment extends Reminder
+    class GroomingReminder extends Reminder
+    class ExerciseReminder extends Reminder
+
+    class MedicalRecord {
+        - id: int
+        - petId: int
+        - diagnosis: String
+    }
+    class User {
+        - id: int
+        - username: String
+    }
+}
+
+package "com.mehdi.petreminder.repository" {
+    interface IRepository<T> {
+        + save(entity: T): int
+        + findById(id: int): Optional<T>
+        + findAll(): List<T>
+        + update(entity: T): boolean
+        + delete(id: int): boolean
+    }
+    class BinaryRepository<T> implements IRepository
+
+    abstract class SqliteRepository<T> implements IRepository
+    class PetSqliteRepository extends SqliteRepository
+    class ReminderSqliteRepository extends SqliteRepository
+}
+
+package "com.mehdi.petreminder.observer" {
+    interface PetReminderObserver {
+        + onEvent(eventType: EventType, data: Object)
+    }
+    class EventManager {
+        - static instance: EventManager
+        - listeners: Map<EventType, List<PetReminderObserver>>
+        + {static} getInstance(): EventManager
+        + subscribe(eventType: EventType, listener: PetReminderObserver)
+        + notify(eventType: EventType, data: Object)
+    }
+}
+
+package "com.mehdi.petreminder.service" {
+    class PetService {
+        + addPet(pet: Pet)
+        + getPetById(id: int)
+    }
+    PetService --> IRepository : uses
+    PetService --> EventManager : notifies
+}
+
+package "com.mehdi.petreminder.config" {
+    class RepositoryFactory {
+        + {static} createPetRepository(): IRepository<Pet>
+    }
+}
+
+RepositoryFactory ..> BinaryRepository : creates
+RepositoryFactory ..> PetSqliteRepository : creates
+
+@enduml

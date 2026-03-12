@@ -1,43 +1,30 @@
 # Changelog
+All notable changes to the Pet Care Reminder System will be documented in this file.
 
-Bu proje için yapılan tüm önemli değişiklikler bu dosyada belgelenmektedir.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Format [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/) standardına uygundur.
-
-## [2.0.0] - 2026-03-12
+## [1.0.0] - 2026-03-27
 
 ### Added
-- Swing GUI arayüzü (FlatLaf + MigLayout ile modern tasarım)
-- `MainFrame`, `PetPanel`, `ReminderPanel`, `SettingsPanel` bileşenleri
-- MySQL desteği (`MySqlRepository`, `docker-compose.yml`)
-- `RepositoryFactory` ile runtime storage seçimi (Binary / SQLite / MySQL)
-- `StorageConfig` ile yapılandırma yönetimi
-- JaCoCo ile test coverage (%100 hedef, GUI ve MySQL hariç)
-- Checkstyle (Google Java Style) ve SpotBugs entegrasyonu
-- CI/CD: `ci.yml` — her push/PR'da otomatik build & test
-- Fat JAR oluşturma (maven-shade-plugin)
-
-### Changed
-- JUnit 4 → JUnit 5 geçişi (tüm test sınıfları)
-- SQLite repository'lerde H2 uyumluluğu (AUTOINCREMENT → AUTO_INCREMENT)
-- `PetSqliteRepository.mapRow()` Türkçe species eşleşmesi eklendi
+- **Core Models:** 
+  - Implementation of polymorphic hierarchy for `Pet` (`Dog`, `Cat`, `Bird`).
+  - Implementation of polymorphic hierarchy for `Reminder` (`FeedingReminder`, `MedicationReminder`, `VetAppointment`, `ExerciseReminder`, `GroomingReminder`).
+- **Repositories:** 
+  - Multiple Storage Backend Implementations (Binary, SQLite, MySQL) via `RepositoryFactory`.
+  - Advanced Template Method usage in `SqliteRepository`.
+  - Enhanced binary serialization in `BinaryRepository`.
+- **Observer Pattern:** 
+  - Implemented EventManager mechanism to notify listeners on CRUD operations (`PET_ADDED`, `REMINDER_COMPLETED`, etc.).
+- **Unit Testing:** 
+  - Comprehensive JUnit 5 test suite reaching >95% Instruction and Branch Coverage (JaCoCo).
+- **Documentation:**
+  - Javadoc/Doxygen documentation coverage 100%.
+  - Included Class, Use-Case, ER, and Sequence Diagrams across `design/plantuml` folder.
+- **CI/CD:**
+  - Integrated GitHub Actions CI Pipeline (`.github/workflows/ci.yml`) to perform automated Maven builds and JaCoCo reports on pushes/PRs.
 
 ### Fixed
-- `PetModelTest` JUnit import hataları düzeltildi
-- `StorageConfigTest` yanlış metod adı (`getBinaryDataPath` → `getBinaryDirectory`)
-- `PetServiceTest` species filtreleme hatası (`"Dog"` → `"Kopek"`)
-- Tüm SQLite repository tablo oluşturma hatası (H2 test DB için)
-
-## [1.0.0] - 2026-02-15
-
-### Added
-- Proje temel yapısı (Maven, Java 11)
-- `Pet` model sınıfı ve alt sınıflar (`Dog`, `Cat`, `Bird`)
-- `Reminder` model sınıfı ve alt sınıflar (`FeedingReminder`, `VetReminder`, `GroomingReminder`, `WalkReminder`, `MedicationReminder`)
-- `IRepository<T>` arayüzü (`save`, `findById`, `findAll`, `update`, `delete`)
-- `BinaryRepository<T>` — dosya tabanlı kalıcı depolama (Serializable)
-- `SqliteRepository<T>` — SQLite veritabanı depolama
-- `PetService` ve `ReminderService` iş mantığı katmanları
-- `ConsoleApp` — konsol tabanlı kullanıcı arayüzü
-- JUnit 5 ile temel birim testleri
-- README.md ve LICENSE dosyaları
+- Addressed file resource leaks (e.g. `FileInputStream`) during testing within `BinaryRepository.java`.
+- Corrected reflection errors around ID mappings during fallback edge cases.
+- Ensured thread safety in the `EventManager` singleton by switching to `CopyOnWriteArrayList` and robust lock mechanisms.

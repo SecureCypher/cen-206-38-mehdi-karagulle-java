@@ -1,39 +1,40 @@
-name: CI — Build & Test
+name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main", "master" ]
 
 jobs:
   build:
-    name: Build & Test (Java 17)
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Build and Test with Maven
+      run: >
+        mvn -B clean verify 
+        --file petreminder-app/pom.xml
+        
+    - name: Generate Coverage Report
+      run: >
+        mvn -B jacoco:report
+        --file petreminder-app/pom.xml
 
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-
-      - name: Build & Run Tests
-        run: mvn clean test --batch-mode --no-transfer-progress
-        working-directory: ./petreminder-app
-
-      - name: Generate JaCoCo Report
-        run: mvn jacoco:report --batch-mode --no-transfer-progress
-        working-directory: ./petreminder-app
-
-      - name: Upload Coverage Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-coverage-report
-          path: petreminder-app/target/site/jacoco/
-          retention-days: 30
+    - name: Upload Coverage Reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        directory: ./petreminder-app/target/site/jacoco/
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false

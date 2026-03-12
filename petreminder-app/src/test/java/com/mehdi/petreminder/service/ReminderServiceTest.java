@@ -171,4 +171,34 @@ class ReminderServiceTest {
         assertDoesNotThrow(() -> service.close());
         verify(mockRepo).close();
     }
+
+    @Test @DisplayName("Varsayılan yapıcı")
+    void testDefaultConstructor() {
+        assertDoesNotThrow(() -> new ReminderService());
+    }
+
+    @Test @DisplayName("validateReminder: validate false dönerse fırlatır")
+    void testValidateReminderFalse() {
+        FeedingReminder fr = new FeedingReminder();
+        fr.setPetId(1);
+        fr.setScheduledTime(FUTURE);
+        // validate() false donecek cunku foodType bos vb.
+        assertThrows(ServiceException.class, () -> service.addReminder(fr));
+    }
+
+    @Test @DisplayName("markCompleted: bulunamayan exception fırlatır")
+    void testMarkCompletedNotFound() {
+        when(mockRepo.findById(99)).thenReturn(Optional.empty());
+        assertThrows(ServiceException.class, () -> service.markCompleted(99));
+    }
+
+    @Test @DisplayName("getPendingReminders: scheduledTime null olan")
+    void testGetPendingRemindersNullTime() {
+        FeedingReminder r1 = new FeedingReminder(1, 1, "Rex", null, "Mama", 100);
+        FeedingReminder r2 = new FeedingReminder(2, 1, "Rex", FUTURE, "Mama", 100);
+        when(mockRepo.findAll()).thenReturn(List.of(r1, r2));
+        List<Reminder> list = service.getPendingReminders();
+        assertEquals(2, list.size());
+        assertEquals(2, list.get(0).getId()); // FUTURE has valid time, sorts before MAX
+    }
 }

@@ -144,7 +144,8 @@ public class BinaryRepository<T extends Serializable> implements IRepository<T> 
         if (!file.exists() || file.length() == 0) {
             return new ArrayList<>();
         }
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+        try (FileInputStream fis = new FileInputStream(file);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
             Object obj = ois.readObject();
             if (obj instanceof List) {
                 return (List<T>) obj;
