@@ -3,6 +3,9 @@
  * @brief Ana Swing penceresi — tüm panelleri barındırır.
  * @details FlatLaf light tema, sol navigasyon, sağ içerik paneli.
  */
+/**
+ * Member documentation.
+ */
 package com.mehdi.petreminder.gui;
 
 import com.formdev.flatlaf.FlatLightLaf;

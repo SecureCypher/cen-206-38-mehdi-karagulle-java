@@ -38,12 +38,18 @@ public class ReminderSqliteRepository extends SqliteRepository<Reminder> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getTableName() {
         return "reminders";
     }
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getCreateTableSql() {
         return "CREATE TABLE IF NOT EXISTS reminders ("
             + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -80,6 +86,9 @@ public class ReminderSqliteRepository extends SqliteRepository<Reminder> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getInsertSql() {
         return "INSERT INTO reminders (pet_id,pet_name,reminder_type,scheduled_time,"
             + "completed,description,priority,recurring,recurrence_pattern,"
@@ -93,6 +102,9 @@ public class ReminderSqliteRepository extends SqliteRepository<Reminder> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getUpdateSql() {
         return "UPDATE reminders SET pet_id=?,pet_name=?,reminder_type=?,scheduled_time=?,"
             + "completed=?,description=?,priority=?,recurring=?,recurrence_pattern=?,"
@@ -106,6 +118,9 @@ public class ReminderSqliteRepository extends SqliteRepository<Reminder> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setInsertParams(PreparedStatement ps, Reminder r) throws SQLException {
         ps.setInt(1, r.getPetId());
         ps.setString(2, r.getPetName());
@@ -144,6 +159,9 @@ public class ReminderSqliteRepository extends SqliteRepository<Reminder> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setUpdateParams(PreparedStatement ps, Reminder r) throws SQLException {
         setInsertParams(ps, r);
         ps.setInt(29, r.getId());
@@ -151,6 +169,9 @@ public class ReminderSqliteRepository extends SqliteRepository<Reminder> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected Reminder mapRow(ResultSet rs) throws SQLException {
         String type = rs.getString("reminder_type");
         int id = rs.getInt("id");

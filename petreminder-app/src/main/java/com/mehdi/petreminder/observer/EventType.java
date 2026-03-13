@@ -15,6 +15,9 @@ package com.mehdi.petreminder.observer;
  * @author Zumre Uykun
  * @version 1.0
  */
+/**
+ * Enum documentation.
+ */
 public enum EventType {
 
     /** @brief Storage backend degisti (BINARY, SQLite, MySQL). */

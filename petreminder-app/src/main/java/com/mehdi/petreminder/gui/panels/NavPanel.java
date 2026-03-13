@@ -1,4 +1,10 @@
 /**
+ * Member documentation.
+ */
+/**
+ * Member documentation.
+ */
+/**
  * @file NavPanel.java
  * @brief Sol navigasyon paneli.
  */

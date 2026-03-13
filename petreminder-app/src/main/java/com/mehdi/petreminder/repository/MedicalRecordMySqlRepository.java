@@ -1,4 +1,10 @@
 /**
+ * Member documentation.
+ */
+/**
+ * Member documentation.
+ */
+/**
  * @file MedicalRecordMySqlRepository.java
  * @brief MedicalRecord için MySQL repository.
  */
@@ -30,10 +36,16 @@ public class MedicalRecordMySqlRepository extends MySqlRepository<MedicalRecord>
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getTableName() { return "medical_records"; }
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getCreateTableSql() {
         return "CREATE TABLE IF NOT EXISTS medical_records ("
             + "id INT AUTO_INCREMENT PRIMARY KEY,"
@@ -53,6 +65,9 @@ public class MedicalRecordMySqlRepository extends MySqlRepository<MedicalRecord>
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getInsertSql() {
         return "INSERT INTO medical_records (pet_id,pet_name,record_date,record_type,"
             + "diagnosis,treatment,veterinarian_name,cost,next_check_date,notes,vaccine_name)"
@@ -61,6 +76,9 @@ public class MedicalRecordMySqlRepository extends MySqlRepository<MedicalRecord>
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getUpdateSql() {
         return "UPDATE medical_records SET pet_id=?,pet_name=?,record_date=?,record_type=?,"
             + "diagnosis=?,treatment=?,veterinarian_name=?,cost=?,next_check_date=?,"
@@ -69,6 +87,9 @@ public class MedicalRecordMySqlRepository extends MySqlRepository<MedicalRecord>
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setInsertParams(PreparedStatement ps, MedicalRecord m) throws SQLException {
         ps.setInt(1, m.getPetId());
         ps.setString(2, m.getPetName());
@@ -87,6 +108,9 @@ public class MedicalRecordMySqlRepository extends MySqlRepository<MedicalRecord>
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setUpdateParams(PreparedStatement ps, MedicalRecord m) throws SQLException {
         setInsertParams(ps, m);
         ps.setInt(12, m.getId());
@@ -94,6 +118,9 @@ public class MedicalRecordMySqlRepository extends MySqlRepository<MedicalRecord>
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected MedicalRecord mapRow(ResultSet rs) throws SQLException {
         MedicalRecord m = new MedicalRecord();
         m.setId(rs.getInt("id"));

@@ -3,6 +3,9 @@
  * @brief Binary file I/O repository — ObjectOutputStream / .bin dosyası.
  * @details PDF LO.6: Binary storage backend — serialize/deserialize.
  */
+/**
+ * Member documentation.
+ */
 package com.mehdi.petreminder.repository;
 
 import org.slf4j.LoggerFactory;

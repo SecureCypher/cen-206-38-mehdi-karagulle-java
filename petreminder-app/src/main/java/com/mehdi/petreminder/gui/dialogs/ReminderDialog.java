@@ -49,14 +49,38 @@ public class ReminderDialog extends JDialog {
 
     // Tür-özel alanlar
     /** @brief Yem türü. */
+    /**
+     * Member documentation.
+     */
+    /**
+     * Member documentation.
+     */
     private JTextField txtFoodType, txtPortionGrams;
     /** @brief İlaç adı. */
+    /**
+     * Member documentation.
+     */
+    /**
+     * Member documentation.
+     */
     private JTextField txtMedName, txtDosage, txtDosageUnit;
     /** @brief Egzersiz türü. */
+    /**
+     * Member documentation.
+     */
+    /**
+     * Member documentation.
+     */
     private JTextField txtExerciseType, txtDuration;
     /** @brief Bakım türü. */
     private JTextField txtGroomingType;
     /** @brief Vet adı. */
+    /**
+     * Member documentation.
+     */
+    /**
+     * Member documentation.
+     */
     private JTextField txtVetName, txtClinic, txtReason;
 
     /** @brief Dinamik alan paneli. */
@@ -80,6 +104,9 @@ public class ReminderDialog extends JDialog {
         setMinimumSize(new Dimension(440, 480));
     }
 
+    /**
+     * Member documentation.
+     */
     private void buildUI() {
         JPanel main = new JPanel(new BorderLayout(8, 8));
         main.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -90,6 +117,9 @@ public class ReminderDialog extends JDialog {
         setContentPane(main);
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildCommonForm() {
         JPanel p = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -119,6 +149,9 @@ public class ReminderDialog extends JDialog {
         return p;
     }
 
+    /**
+     * Member documentation.
+     */
     private void updateSpecificFields() {
         specificPanel.removeAll();
         String type = (String) cmbType.getSelectedItem();
@@ -158,6 +191,9 @@ public class ReminderDialog extends JDialog {
         pack();
     }
 
+    /**
+     * Member documentation.
+     */
     private void fillForm(Reminder r) {
         txtPetId.setText(String.valueOf(r.getPetId()));
         txtPetName.setText(r.getPetName() != null ? r.getPetName() : "");
@@ -170,6 +206,9 @@ public class ReminderDialog extends JDialog {
         txtDesc.setText(r.getDescription() != null ? r.getDescription() : "");
     }
 
+    /**
+     * Member documentation.
+     */
     private void onSave() {
         try {
             int petId = Integer.parseInt(txtPetId.getText().trim());
@@ -231,6 +270,9 @@ public class ReminderDialog extends JDialog {
         }
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildButtons() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton ok = new JButton("Kaydet");
@@ -245,6 +287,9 @@ public class ReminderDialog extends JDialog {
         return p;
     }
 
+    /**
+     * Member documentation.
+     */
     private JTextField addField(JPanel p, GridBagConstraints gbc, int row, String label, JTextField field) {
         addLabel(p, gbc, row, label);
         gbc.gridx = 1; gbc.gridy = row;
@@ -252,6 +297,9 @@ public class ReminderDialog extends JDialog {
         return field;
     }
 
+    /**
+     * Member documentation.
+     */
     private void addLabel(JPanel p, GridBagConstraints gbc, int row, String text) {
         gbc.gridx = 0; gbc.gridy = row;
         p.add(new JLabel(text), gbc);
