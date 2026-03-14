@@ -305,7 +305,7 @@
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.mehdi.ibrahim.zumre.petreminder.petreminderApp</mainClass>
+                  <mainClass>com.mehdi.petreminder.petreminderApp</mainClass>
                 </transformer>
               </transformers>
               <filters>

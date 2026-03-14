@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven 3.9.12
+Built-By: ibrah
+Build-Jdk: 11.0.12
+Main-Class: com.mehdi.ibrahim.zumre.petreminder.petreminderApp
+
