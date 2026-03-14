@@ -12,6 +12,9 @@ package com.mehdi.petreminder.config;
  * @author Zumre Uykun
  * @version 1.0
  */
+/**
+ * Enum documentation.
+ */
 public enum StorageType {
 
     /** @brief Binary dosya (.bin) */

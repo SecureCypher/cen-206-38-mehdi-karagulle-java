@@ -1,4 +1,10 @@
 /**
+ * Member documentation.
+ */
+/**
+ * Member documentation.
+ */
+/**
  * @file PetsPanel.java
  * @brief Evcil hayvanlar yönetim paneli — tam CRUD.
  */
@@ -254,6 +260,9 @@ public class PetsPanel extends JPanel {
 
     // ── Yardımcı buton oluşturucular ─────────────────────────────────
 
+    /**
+     * Member documentation.
+     */
     private JButton buildPrimaryButton(String text, java.awt.event.ActionListener al) {
         JButton b = new JButton(text);
         b.setBackground(GuiConstants.PRIMARY);
@@ -264,6 +273,9 @@ public class PetsPanel extends JPanel {
         return b;
     }
 
+    /**
+     * Member documentation.
+     */
     private JButton buildButton(String text, java.awt.event.ActionListener al) {
         JButton b = new JButton(text);
         b.setFocusPainted(false);
@@ -272,6 +284,9 @@ public class PetsPanel extends JPanel {
         return b;
     }
 
+    /**
+     * Member documentation.
+     */
     private JButton buildDangerButton(String text, java.awt.event.ActionListener al) {
         JButton b = new JButton(text);
         b.setBackground(GuiConstants.DANGER);
@@ -282,6 +297,9 @@ public class PetsPanel extends JPanel {
         return b;
     }
 
+    /**
+     * Member documentation.
+     */
     private JButton buildIconButton(String icon, String tooltip,
                                     java.awt.event.ActionListener al) {
         JButton b = new JButton(icon);

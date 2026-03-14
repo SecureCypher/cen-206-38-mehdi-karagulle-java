@@ -49,6 +49,9 @@ public class SettingsPanel extends JPanel {
         buildUI();
     }
 
+    /**
+     * Member documentation.
+     */
     private void buildUI() {
         JLabel title = new JLabel("⚙️ Ayarlar");
         title.setFont(GuiConstants.TITLE_FONT);
@@ -64,6 +67,9 @@ public class SettingsPanel extends JPanel {
         add(center, BorderLayout.CENTER);
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildStorageSection() {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(GuiConstants.CARD_BG);
@@ -110,6 +116,9 @@ public class SettingsPanel extends JPanel {
         return card;
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildInfoSection() {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(GuiConstants.CARD_BG);
@@ -136,6 +145,9 @@ public class SettingsPanel extends JPanel {
         return card;
     }
 
+    /**
+     * Member documentation.
+     */
     private void addInfoRow(JPanel p, GridBagConstraints gbc, int row,
                              String key, String value) {
         gbc.gridx = 0; gbc.gridy = row;
@@ -149,6 +161,9 @@ public class SettingsPanel extends JPanel {
         p.add(v, gbc);
     }
 
+    /**
+     * Member documentation.
+     */
     private void applyStorage() {
         StorageType selected = (StorageType) cmbStorage.getSelectedItem();
         if (selected != null) {

@@ -3,6 +3,9 @@
  * @brief Sağlık kayıtları servis katmanı.
  * @details Observer Pattern: CRUD işlemlerinde EventManager'a bildirim gönderir.
  */
+/**
+ * Member documentation.
+ */
 package com.mehdi.petreminder.service;
 
 import com.mehdi.petreminder.model.MedicalRecord;

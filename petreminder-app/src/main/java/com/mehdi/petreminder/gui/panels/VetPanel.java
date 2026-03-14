@@ -57,6 +57,9 @@ public class VetPanel extends JPanel {
         buildUI();
     }
 
+    /**
+     * Member documentation.
+     */
     private void buildUI() {
         JLabel title = new JLabel("🏥 Veteriner Randevuları");
         title.setFont(GuiConstants.TITLE_FONT);
@@ -65,6 +68,9 @@ public class VetPanel extends JPanel {
         add(buildToolbar(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Member documentation.
+     */
     private JScrollPane buildTable() {
         String[] cols = {"ID", "Pet", "Veteriner", "Klinik", "Sebep", "Zaman", "Onay"};
         tableModel = new DefaultTableModel(cols, 0) {
@@ -77,6 +83,9 @@ public class VetPanel extends JPanel {
         return new JScrollPane(table);
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildToolbar() {
         JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         bar.setOpaque(false);
@@ -86,6 +95,9 @@ public class VetPanel extends JPanel {
         return bar;
     }
 
+    /**
+     * Member documentation.
+     */
     private void addAppointment() {
         JTextField petId     = new JTextField("1");
         JTextField petName   = new JTextField();
@@ -120,6 +132,9 @@ public class VetPanel extends JPanel {
         }
     }
 
+    /**
+     * Member documentation.
+     */
     private void confirmSelected() {
         int row = table.getSelectedRow();
         if (row < 0) return;
@@ -136,6 +151,9 @@ public class VetPanel extends JPanel {
         }
     }
 
+    /**
+     * Member documentation.
+     */
     private void deleteSelected() {
         int row = table.getSelectedRow();
         if (row < 0) return;
@@ -168,6 +186,9 @@ public class VetPanel extends JPanel {
         } catch (Exception e) { /* sessiz */ }
     }
 
+    /**
+     * Member documentation.
+     */
     private JButton btn(String text, Color bg, java.awt.event.ActionListener al) {
         JButton b = new JButton(text);
         if (bg != null) { b.setBackground(bg); b.setForeground(Color.WHITE); }

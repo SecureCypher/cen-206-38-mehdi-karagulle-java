@@ -2,6 +2,9 @@
  * @file GuiConstants.java
  * @brief GUI için renk, font ve boyut sabitleri.
  */
+/**
+ * Member documentation.
+ */
 package com.mehdi.petreminder.gui.util;
 
 import java.awt.*;

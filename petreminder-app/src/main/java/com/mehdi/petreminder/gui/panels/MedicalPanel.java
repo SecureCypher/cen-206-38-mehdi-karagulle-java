@@ -56,6 +56,9 @@ public class MedicalPanel extends JPanel {
         buildUI();
     }
 
+    /**
+     * Member documentation.
+     */
     private void buildUI() {
         JLabel title = new JLabel("📋 Sağlık Kayıtları");
         title.setFont(GuiConstants.TITLE_FONT);
@@ -64,6 +67,9 @@ public class MedicalPanel extends JPanel {
         add(buildToolbar(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Member documentation.
+     */
     private JScrollPane buildTable() {
         String[] cols = {"ID", "Pet", "Tür", "Teşhis", "Veteriner", "Tarih", "Maliyet (₺)"};
         tableModel = new DefaultTableModel(cols, 0) {
@@ -76,6 +82,9 @@ public class MedicalPanel extends JPanel {
         return new JScrollPane(table);
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildToolbar() {
         JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         bar.setOpaque(false);
@@ -84,6 +93,9 @@ public class MedicalPanel extends JPanel {
         return bar;
     }
 
+    /**
+     * Member documentation.
+     */
     private void addRecord() {
         JTextField petId      = new JTextField("1");
         JTextField petName    = new JTextField();
@@ -121,6 +133,9 @@ public class MedicalPanel extends JPanel {
         }
     }
 
+    /**
+     * Member documentation.
+     */
     private void deleteSelected() {
         int row = table.getSelectedRow();
         if (row < 0) return;
@@ -154,6 +169,9 @@ public class MedicalPanel extends JPanel {
         } catch (Exception e) { /* sessiz */ }
     }
 
+    /**
+     * Member documentation.
+     */
     private JButton btn(String text, Color bg, java.awt.event.ActionListener al) {
         JButton b = new JButton(text);
         if (bg != null) { b.setBackground(bg); b.setForeground(Color.WHITE); }

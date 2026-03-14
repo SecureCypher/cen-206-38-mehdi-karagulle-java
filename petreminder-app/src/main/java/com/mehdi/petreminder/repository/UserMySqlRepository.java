@@ -30,10 +30,16 @@ public class UserMySqlRepository extends MySqlRepository<User> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getTableName() { return "users"; }
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getCreateTableSql() {
         return "CREATE TABLE IF NOT EXISTS users ("
             + "id INT AUTO_INCREMENT PRIMARY KEY,"
@@ -49,6 +55,9 @@ public class UserMySqlRepository extends MySqlRepository<User> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getInsertSql() {
         return "INSERT INTO users (username,email,password_hash,full_name,created_at,active)"
             + " VALUES (?,?,?,?,?,?)";
@@ -56,6 +65,9 @@ public class UserMySqlRepository extends MySqlRepository<User> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getUpdateSql() {
         return "UPDATE users SET username=?,email=?,password_hash=?,full_name=?,"
             + "created_at=?,active=? WHERE id=?";
@@ -63,6 +75,9 @@ public class UserMySqlRepository extends MySqlRepository<User> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setInsertParams(PreparedStatement ps, User u) throws SQLException {
         ps.setString(1, u.getUsername());
         ps.setString(2, u.getEmail());
@@ -75,6 +90,9 @@ public class UserMySqlRepository extends MySqlRepository<User> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setUpdateParams(PreparedStatement ps, User u) throws SQLException {
         setInsertParams(ps, u);
         ps.setInt(7, u.getId());
@@ -82,6 +100,9 @@ public class UserMySqlRepository extends MySqlRepository<User> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected User mapRow(ResultSet rs) throws SQLException {
         User u = new User();
         u.setId(rs.getInt("id"));

@@ -4,6 +4,9 @@
  * @details PDF zorunluluğu: Console-based menu with keyboard navigation.
  *          Tüm CRUD işlemleri için menü ekranları buradan başlatılır.
  */
+/**
+ * Member documentation.
+ */
 package com.mehdi.petreminder;
 
 import com.mehdi.petreminder.config.StorageConfig;

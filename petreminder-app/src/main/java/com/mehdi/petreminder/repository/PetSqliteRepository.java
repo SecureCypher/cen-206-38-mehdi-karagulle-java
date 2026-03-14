@@ -45,12 +45,18 @@ public class PetSqliteRepository extends SqliteRepository<Pet> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getTableName() {
         return "pets";
     }
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getCreateTableSql() {
         return "CREATE TABLE IF NOT EXISTS pets ("
             + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -71,6 +77,9 @@ public class PetSqliteRepository extends SqliteRepository<Pet> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getInsertSql() {
         return "INSERT INTO pets (owner_id,name,species,breed,birth_date,gender,"
             + "weight,notes,can_talk,bird_type,is_trained,is_indoor) "
@@ -79,6 +88,9 @@ public class PetSqliteRepository extends SqliteRepository<Pet> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected String getUpdateSql() {
         return "UPDATE pets SET owner_id=?,name=?,species=?,breed=?,birth_date=?,"
             + "gender=?,weight=?,notes=?,can_talk=?,bird_type=?,is_trained=?,is_indoor=? "
@@ -87,6 +99,9 @@ public class PetSqliteRepository extends SqliteRepository<Pet> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setInsertParams(PreparedStatement ps, Pet pet) throws SQLException {
         ps.setInt(1, pet.getOwnerId());
         ps.setString(2, pet.getName());
@@ -104,6 +119,9 @@ public class PetSqliteRepository extends SqliteRepository<Pet> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected void setUpdateParams(PreparedStatement ps, Pet pet) throws SQLException {
         setInsertParams(ps, pet);
         ps.setInt(13, pet.getId());
@@ -111,6 +129,9 @@ public class PetSqliteRepository extends SqliteRepository<Pet> {
 
     /** {@inheritDoc} */
     @Override
+    /**
+     * Member documentation.
+     */
     protected Pet mapRow(ResultSet rs) throws SQLException {
         String species = rs.getString("species");
         int id = rs.getInt("id");

@@ -1,8 +1,17 @@
 /**
+ * Member documentation.
+ */
+/**
+ * Member documentation.
+ */
+/**
  * @file EventManager.java
  * @brief Observer Pattern — Subject (yayinci) sinifi.
  * @details Observer'lari kaydeder, cikarir ve bildirim gonderir.
  *          Singleton Pattern ile tek instance kullanilir.
+ */
+/**
+ * Member documentation.
  */
 package com.mehdi.petreminder.observer;
 

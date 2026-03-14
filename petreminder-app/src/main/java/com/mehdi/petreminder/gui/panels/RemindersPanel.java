@@ -59,12 +59,18 @@ public class RemindersPanel extends JPanel {
         buildUI();
     }
 
+    /**
+     * Member documentation.
+     */
     private void buildUI() {
         add(buildHeader(), BorderLayout.NORTH);
         add(buildTable(), BorderLayout.CENTER);
         add(buildToolbar(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildHeader() {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
@@ -77,6 +83,9 @@ public class RemindersPanel extends JPanel {
         return p;
     }
 
+    /**
+     * Member documentation.
+     */
     private JScrollPane buildTable() {
         String[] cols = {"ID", "Pet", "Tür", "Öncelik", "Zaman", "Durum"};
         tableModel = new DefaultTableModel(cols, 0) {
@@ -96,6 +105,9 @@ public class RemindersPanel extends JPanel {
         return new JScrollPane(table);
     }
 
+    /**
+     * Member documentation.
+     */
     private JPanel buildToolbar() {
         JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         bar.setOpaque(false);
@@ -106,6 +118,9 @@ public class RemindersPanel extends JPanel {
         return bar;
     }
 
+    /**
+     * Member documentation.
+     */
     private void addReminder() {
         ReminderDialog dlg = new ReminderDialog(
             (Frame) SwingUtilities.getWindowAncestor(this), null);
@@ -121,6 +136,9 @@ public class RemindersPanel extends JPanel {
         }
     }
 
+    /**
+     * Member documentation.
+     */
     private void editSelected() {
         int row = table.getSelectedRow();
         if (row < 0) return;
@@ -140,6 +158,9 @@ public class RemindersPanel extends JPanel {
         }
     }
 
+    /**
+     * Member documentation.
+     */
     private void completeSelected() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -163,6 +184,9 @@ public class RemindersPanel extends JPanel {
         }
     }
 
+    /**
+     * Member documentation.
+     */
     private void deleteSelected() {
         int row = table.getSelectedRow();
         if (row < 0) return;
@@ -194,6 +218,9 @@ public class RemindersPanel extends JPanel {
         } catch (Exception e) { /* sessiz */ }
     }
 
+    /**
+     * Member documentation.
+     */
     private JButton btn(String text, Color bg, java.awt.event.ActionListener al) {
         JButton b = new JButton(text);
         if (bg != null) { b.setBackground(bg); b.setForeground(Color.WHITE); }

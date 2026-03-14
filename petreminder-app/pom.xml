@@ -11,12 +11,12 @@
   <packaging>jar</packaging>
 
   <name>petreminder-app</name>
-  <url>https://github.com/ucoruh/eclipse-java-maven-template</url>
+  <url>https://github.com/SecureCypher/cen-206-38-mehdi-karagulle-java</url>
   <description>CEN206 Term Project - Pet Care Reminder System</description>
   <inceptionYear>2026</inceptionYear>
 
   <scm>
-    <url>https://github.com/ucoruh/eclipse-java-maven-template</url>
+    <url>https://github.com/SecureCypher/cen-206-38-mehdi-karagulle-java</url>
   </scm>
 
   <developers>
@@ -68,12 +68,12 @@
 
   <issueManagement>
     <system>Github</system>
-    <url>https://github.com/ucoruh/eclipse-java-maven-template</url>
+    <url>https://github.com/SecureCypher/cen-206-38-mehdi-karagulle-java</url>
   </issueManagement>
 
   <ciManagement>
     <system>Github</system>
-    <url>https://github.com/ucoruh/eclipse-java-maven-template</url>
+    <url>https://github.com/SecureCypher/cen-206-38-mehdi-karagulle-java</url>
   </ciManagement>
 
   <distributionManagement>
@@ -84,7 +84,7 @@
     <repository>
       <id>eclipse-java-maven-template</id>
       <name>eclipse-java-maven-template</name>
-      <url>https://github.com/ucoruh/eclipse-java-maven-template</url>
+      <url>https://github.com/SecureCypher/cen-206-38-mehdi-karagulle-java</url>
     </repository>
   </distributionManagement>
 

@@ -2,6 +2,9 @@
  * @file Bird.java
  * @brief Kus turunu temsil eden somut sinif.
  */
+/**
+ * Member documentation.
+ */
 package com.mehdi.petreminder.model;
 
 import java.time.LocalDate;
