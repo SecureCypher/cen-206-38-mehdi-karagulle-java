@@ -1,0 +1,59 @@
+@startuml C4_Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Pet Care Reminder System — Component Diagram
+
+Container_Boundary(app, "Pet Care Reminder Application") {
+
+    Component(consoleApp, "ConsoleApp", "Java Class", "Konsol tabanlı ana uygulama.\nMenü sistemi ve kullanıcı etkileşimi.")
+    Component(mainFrame, "MainFrame", "Java Swing JFrame", "GUI ana penceresi.\nNavPanel, DashboardPanel,\nPetsPanel, RemindersPanel vb.")
+
+    Component(petService, "PetService", "Java Class", "Pet CRUD iş mantığı.\nDoğrulama, arama, filtreleme.")
+    Component(reminderService, "ReminderService", "Java Class", "Hatırlatıcı iş mantığı.\nZamanlama, tamamlama.")
+    Component(medicalService, "MedicalRecordService", "Java Class", "Tıbbi kayıt iş mantığı.")
+
+    Component(eventMgr, "EventManager", "Singleton", "Observer Pattern Subject.\nOlay yayını ve observer yönetimi.")
+    Component(observer, "PetReminderObserver", "Interface", "Observer arayüzü.\nonEvent(EventType, Object)")
+
+    Component(iRepo, "IRepository<T>", "Interface", "Generic CRUD arayüzü.\nsave, findById, findAll,\nupdate, delete, count, close")
+    Component(repoFactory, "RepositoryFactory", "Factory Pattern", "Aktif backend'e göre\nrepository nesnesi üretir.")
+    Component(binaryRepo, "BinaryRepository<T>", "Java Class", "Java Serialization ile\nbinary dosya I/O.")
+    Component(sqliteRepo, "SqliteRepository<T>", "Abstract Class", "SQLite JDBC bağlantısı.\nPet/Reminder/User/Medical alt sınıfları.")
+    Component(mysqlRepo, "MySqlRepository<T>", "Abstract Class", "MySQL JDBC bağlantısı.\nPet/Reminder/User/Medical alt sınıfları.")
+
+    Component(storageConfig, "StorageConfig", "Java Class", "Aktif storage backend\nyapılandırması. Runtime switch.")
+
+    Component(models, "Domain Models", "Java Classes", "Pet (abstract), Dog, Cat, Bird,\nReminder (abstract), FeedingReminder,\nMedicationReminder, VetAppointment,\nGroomingReminder, ExerciseReminder,\nMedicalRecord, User")
+}
+
+Rel(consoleApp, petService, "Kullanır")
+Rel(consoleApp, reminderService, "Kullanır")
+Rel(mainFrame, petService, "Kullanır")
+Rel(mainFrame, reminderService, "Kullanır")
+Rel(mainFrame, medicalService, "Kullanır")
+Rel(mainFrame, observer, "Implements")
+
+Rel(petService, iRepo, "CRUD")
+Rel(reminderService, iRepo, "CRUD")
+Rel(medicalService, iRepo, "CRUD")
+
+Rel(petService, eventMgr, "notify()")
+Rel(reminderService, eventMgr, "notify()")
+
+Rel(eventMgr, observer, "onEvent()")
+
+Rel(repoFactory, binaryRepo, "Creates")
+Rel(repoFactory, sqliteRepo, "Creates")
+Rel(repoFactory, mysqlRepo, "Creates")
+Rel(repoFactory, storageConfig, "getActiveBackend()")
+
+Rel(binaryRepo, iRepo, "Implements")
+Rel(sqliteRepo, iRepo, "Implements")
+Rel(mysqlRepo, iRepo, "Implements")
+
+Rel(petService, models, "Uses")
+Rel(reminderService, models, "Uses")
+
+@enduml

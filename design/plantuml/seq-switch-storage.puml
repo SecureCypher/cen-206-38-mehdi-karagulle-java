@@ -1,0 +1,49 @@
+@startuml SwitchStorageSequence
+title Storage Backend Değiştirme Akışı
+
+actor "User" as User
+boundary "SettingsPanel" as UI
+control "StorageConfig" as Config
+control "RepositoryFactory" as Factory
+database "BinaryRepository" as Binary
+database "SqliteRepository" as Sqlite
+database "MySqlRepository" as MySQL
+
+User -> UI : "Storage Backend" seçer
+activate UI
+
+UI -> Config : setActiveBackend(StorageType.SQLITE)
+activate Config
+Config -> Config : activeBackend = SQLITE
+Config --> UI : backend değiştirildi
+deactivate Config
+
+UI -> Factory : createPetRepository()
+activate Factory
+
+Factory -> Config : getActiveBackend()
+activate Config
+Config --> Factory : SQLITE
+deactivate Config
+
+Factory -> Sqlite ** : new PetSqliteRepository()
+activate Sqlite
+Sqlite -> Sqlite : initializeDatabase()
+Sqlite --> Factory : repository instance
+deactivate Sqlite
+
+Factory --> UI : IRepository<Pet>
+deactivate Factory
+
+UI -> UI : refreshAllPanels()
+UI -> User : "Backend değiştirildi: SQLite" mesajı
+deactivate UI
+
+note right of Factory
+  Factory Pattern:
+  StorageType'a göre
+  Binary / SQLite / MySQL
+  repository döndürür
+end note
+
+@enduml

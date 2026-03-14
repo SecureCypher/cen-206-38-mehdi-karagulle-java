@@ -8,34 +8,71 @@ package "com.mehdi.petreminder.model" {
         - species: String
         - birthDate: LocalDate
         - ownerId: int
+        - gender: String
+        - weight: double
+        - notes: String
         + {abstract} makeSound(): String
+        + {abstract} getIconName(): String
+        + getAge(): int
+        + getAgeString(): String
     }
-    class Dog extends Pet
-    class Cat extends Pet
-    class Bird extends Pet
+    class Dog extends Pet {
+        - breed: String
+        + makeSound(): String
+    }
+    class Cat extends Pet {
+        - isIndoor: boolean
+        + makeSound(): String
+    }
+    class Bird extends Pet {
+        - canFly: boolean
+        + makeSound(): String
+    }
 
     abstract class Reminder {
         - id: int
         - petId: int
         - scheduledTime: LocalDateTime
         - completed: boolean
+        - description: String
+        - priority: String
         + {abstract} validate(): boolean
         + {abstract} getReminderType(): String
     }
-    class FeedingReminder extends Reminder
-    class MedicationReminder extends Reminder
-    class VetAppointment extends Reminder
-    class GroomingReminder extends Reminder
-    class ExerciseReminder extends Reminder
+    class FeedingReminder extends Reminder {
+        - foodType: String
+        - amount: double
+    }
+    class MedicationReminder extends Reminder {
+        - medicationName: String
+        - dosage: String
+    }
+    class VetAppointment extends Reminder {
+        - vetName: String
+        - clinic: String
+    }
+    class GroomingReminder extends Reminder {
+        - groomingType: String
+    }
+    class ExerciseReminder extends Reminder {
+        - durationMinutes: int
+        - exerciseType: String
+    }
 
     class MedicalRecord {
         - id: int
         - petId: int
+        - recordDate: LocalDate
+        - recordType: String
         - diagnosis: String
+        - treatment: String
+        - veterinarian: String
     }
     class User {
         - id: int
         - username: String
+        - passwordHash: String
+        - email: String
     }
 }
 
@@ -46,43 +83,119 @@ package "com.mehdi.petreminder.repository" {
         + findAll(): List<T>
         + update(entity: T): boolean
         + delete(id: int): boolean
+        + deleteAll(): void
+        + count(): int
+        + close(): void
     }
-    class BinaryRepository<T> implements IRepository
+    class BinaryRepository<T> implements IRepository {
+        - directory: String
+        - entityName: String
+    }
 
-    abstract class SqliteRepository<T> implements IRepository
+    abstract class SqliteRepository<T> implements IRepository {
+        # connection: Connection
+    }
     class PetSqliteRepository extends SqliteRepository
     class ReminderSqliteRepository extends SqliteRepository
+    class UserSqliteRepository extends SqliteRepository
+    class MedicalRecordSqliteRepository extends SqliteRepository
+
+    abstract class MySqlRepository<T> implements IRepository {
+        # connection: Connection
+    }
+    class PetMySqlRepository extends MySqlRepository
+    class ReminderMySqlRepository extends MySqlRepository
+    class UserMySqlRepository extends MySqlRepository
+    class MedicalRecordMySqlRepository extends MySqlRepository
+
+    class RepositoryFactory {
+        + {static} createPetRepository(): IRepository<Pet>
+        + {static} createReminderRepository(): IRepository<Reminder>
+        + {static} createUserRepository(): IRepository<User>
+        + {static} createMedicalRecordRepository(): IRepository<MedicalRecord>
+        + {static} getActiveType(): StorageType
+    }
+    class RepositoryException
 }
 
 package "com.mehdi.petreminder.observer" {
     interface PetReminderObserver {
         + onEvent(eventType: EventType, data: Object)
     }
+    enum EventType {
+        PET_ADDED
+        PET_UPDATED
+        PET_DELETED
+        REMINDER_ADDED
+        REMINDER_COMPLETED
+        REMINDER_DELETED
+        STORAGE_CHANGED
+    }
     class EventManager {
-        - static instance: EventManager
+        - {static} instance: EventManager
         - listeners: Map<EventType, List<PetReminderObserver>>
         + {static} getInstance(): EventManager
         + subscribe(eventType: EventType, listener: PetReminderObserver)
+        + unsubscribe(eventType: EventType, listener: PetReminderObserver)
+        + unsubscribeAll(observer: PetReminderObserver)
         + notify(eventType: EventType, data: Object)
+        + getObserverCount(eventType: EventType): int
+        + clearAll(): void
     }
 }
 
 package "com.mehdi.petreminder.service" {
     class PetService {
-        + addPet(pet: Pet)
-        + getPetById(id: int)
+        - repository: IRepository<Pet>
+        + addPet(pet: Pet): Pet
+        + getPetById(id: int): Pet
+        + getAllPets(): List<Pet>
+        + updatePet(pet: Pet): void
+        + deletePet(id: int): void
+        + searchByName(name: String): List<Pet>
+        + filterBySpecies(species: String): List<Pet>
     }
-    PetService --> IRepository : uses
-    PetService --> EventManager : notifies
+    class ReminderService {
+        - repository: IRepository<Reminder>
+        + addReminder(reminder: Reminder): Reminder
+        + getRemindersForPet(petId: int): List<Reminder>
+        + completeReminder(id: int): void
+    }
+    class MedicalRecordService {
+        - repository: IRepository<MedicalRecord>
+    }
+    class ServiceException
 }
 
 package "com.mehdi.petreminder.config" {
-    class RepositoryFactory {
-        + {static} createPetRepository(): IRepository<Pet>
+    class StorageConfig {
+        - {static} activeBackend: StorageType
+        + {static} getActiveBackend(): StorageType
+        + {static} setActiveBackend(type: StorageType): void
+    }
+    enum StorageType {
+        BINARY
+        SQLITE
+        MYSQL
     }
 }
 
+' ── Relations ──
+User "1" -- "*" Pet : owns >
+Pet "1" -- "*" Reminder : has >
+Pet "1" -- "*" MedicalRecord : has history >
+
+PetService --> IRepository : uses
+PetService --> EventManager : notifies
+ReminderService --> IRepository : uses
+ReminderService --> EventManager : notifies
+MedicalRecordService --> IRepository : uses
+
 RepositoryFactory ..> BinaryRepository : creates
 RepositoryFactory ..> PetSqliteRepository : creates
+RepositoryFactory ..> PetMySqlRepository : creates
+RepositoryFactory --> StorageConfig : reads
+
+EventManager --> PetReminderObserver : notifies
 
 @enduml

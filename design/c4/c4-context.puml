@@ -1,0 +1,23 @@
+@startuml C4_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Pet Care Reminder System — System Context Diagram
+
+Person(user, "Pet Owner", "Evcil hayvan sahibi.\nHayvanlarını ve hatırlatıcılarını yönetir.")
+
+System(petreminder, "Pet Care Reminder System", "Evcil hayvan bakım hatırlatıcı sistemi.\nJava tabanlı konsol ve GUI uygulaması.")
+
+System_Ext(mysql, "MySQL Database", "Docker üzerinde çalışan\nilişkisel veritabanı.")
+
+System_Ext(sqlite, "SQLite Database", "Gömülü dosya tabanlı\nilişkisel veritabanı.")
+
+System_Ext(filesystem, "File System", "Binary serialization ile\nveri depolama.")
+
+Rel(user, petreminder, "Kullanır", "Console / Swing GUI")
+Rel(petreminder, mysql, "Veri okur/yazar", "JDBC")
+Rel(petreminder, sqlite, "Veri okur/yazar", "JDBC")
+Rel(petreminder, filesystem, "Veri okur/yazar", "Java Serialization")
+
+@enduml

@@ -1,0 +1,84 @@
+@startgantt PetReminderGantt
+title Pet Care Reminder System — Proje Takvimi
+project starts 2026-02-01
+
+-- Faz 1: Midterm (Console Application) --
+[Proje Planlaması] requires 5 days
+[Proje Planlaması] is colored in LightBlue
+
+[PlantUML Diyagramları] requires 5 days
+[PlantUML Diyagramları] starts after [Proje Planlaması]'s end
+[PlantUML Diyagramları] is colored in LightBlue
+
+[C4 Model & UMPLE] requires 3 days
+[C4 Model & UMPLE] starts after [PlantUML Diyagramları]'s end
+[C4 Model & UMPLE] is colored in LightBlue
+
+[Model Katmanı] requires 5 days
+[Model Katmanı] starts after [PlantUML Diyagramları]'s end
+[Model Katmanı] is colored in LightGreen
+
+[Repository Katmanı] requires 7 days
+[Repository Katmanı] starts after [Model Katmanı]'s end
+[Repository Katmanı] is colored in LightGreen
+
+[Service Katmanı] requires 5 days
+[Service Katmanı] starts after [Repository Katmanı]'s end
+[Service Katmanı] is colored in LightGreen
+
+[Observer Pattern] requires 3 days
+[Observer Pattern] starts after [Service Katmanı]'s end
+[Observer Pattern] is colored in LightGreen
+
+[Console UI] requires 5 days
+[Console UI] starts after [Observer Pattern]'s end
+[Console UI] is colored in Orange
+
+[Unit Tests - Faz 1] requires 5 days
+[Unit Tests - Faz 1] starts after [Console UI]'s end
+[Unit Tests - Faz 1] is colored in Salmon
+
+[Doxygen & Dokümantasyon] requires 3 days
+[Doxygen & Dokümantasyon] starts after [Unit Tests - Faz 1]'s end
+[Doxygen & Dokümantasyon] is colored in Plum
+
+[Midterm Teslim] happens at [Doxygen & Dokümantasyon]'s end
+[Midterm Teslim] is colored in Red
+
+-- Faz 2: Final (GUI Extension) --
+[Figma Wireframes] requires 3 days
+[Figma Wireframes] starts after [Midterm Teslim]'s end
+[Figma Wireframes] is colored in LightBlue
+
+[Swing GUI] requires 10 days
+[Swing GUI] starts after [Figma Wireframes]'s end
+[Swing GUI] is colored in LightGreen
+
+[MySQL Backend] requires 5 days
+[MySQL Backend] starts after [Figma Wireframes]'s end
+[MySQL Backend] is colored in LightGreen
+
+[draw.io Deployment] requires 2 days
+[draw.io Deployment] starts after [Swing GUI]'s end
+[draw.io Deployment] is colored in LightBlue
+
+[Refactoring] requires 3 days
+[Refactoring] starts after [Swing GUI]'s end
+[Refactoring] is colored in Khaki
+
+[Unit Tests - Faz 2] requires 5 days
+[Unit Tests - Faz 2] starts after [Refactoring]'s end
+[Unit Tests - Faz 2] is colored in Salmon
+
+[CI/CD Pipeline] requires 3 days
+[CI/CD Pipeline] starts after [Unit Tests - Faz 2]'s end
+[CI/CD Pipeline] is colored in Plum
+
+[Rapor & Sunum] requires 4 days
+[Rapor & Sunum] starts after [CI/CD Pipeline]'s end
+[Rapor & Sunum] is colored in Plum
+
+[Final Teslim] happens at [Rapor & Sunum]'s end
+[Final Teslim] is colored in Red
+
+@endgantt

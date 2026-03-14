@@ -1,0 +1,37 @@
+@startuml C4_Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Pet Care Reminder System — Container Diagram
+
+Person(user, "Pet Owner", "Evcil hayvan sahibi")
+
+System_Boundary(petreminder, "Pet Care Reminder System") {
+    Container(consoleApp, "Console Application", "Java / Maven", "Konsol tabanlı kullanıcı arayüzü.\nKlavye navigasyonu ile menü sistemi.")
+    Container(guiApp, "GUI Application", "Java Swing", "Grafik kullanıcı arayüzü.\nMainFrame, paneller ve diyaloglar.")
+    Container(serviceLayer, "Service Layer", "Java", "İş mantığı katmanı.\nPetService, ReminderService,\nMedicalRecordService.")
+    Container(repoLayer, "Repository Layer", "Java", "Veri erişim katmanı.\nIRepository<T> arayüzü ile\nçoklu backend desteği.")
+    Container(observerSys, "Observer System", "Java", "Olay yönetim sistemi.\nEventManager (Singleton),\nPetReminderObserver arayüzü.")
+}
+
+ContainerDb(binaryStore, "Binary Storage", "Java Serialization", "data/binary/ dizininde\n.dat dosyaları")
+ContainerDb(sqliteDb, "SQLite Database", "SQLite 3", "petreminder.db\ngömülü veritabanı")
+ContainerDb(mysqlDb, "MySQL Database", "MySQL 8 / Docker", "Docker Compose ile\nçalışan veritabanı")
+
+Rel(user, consoleApp, "Kullanır", "Konsol")
+Rel(user, guiApp, "Kullanır", "Swing GUI")
+
+Rel(consoleApp, serviceLayer, "Çağırır")
+Rel(guiApp, serviceLayer, "Çağırır")
+
+Rel(serviceLayer, repoLayer, "CRUD işlemleri")
+Rel(serviceLayer, observerSys, "notify()")
+
+Rel(observerSys, guiApp, "onEvent()")
+
+Rel(repoLayer, binaryStore, "Okur/Yazar", "Serialization")
+Rel(repoLayer, sqliteDb, "Okur/Yazar", "JDBC")
+Rel(repoLayer, mysqlDb, "Okur/Yazar", "JDBC")
+
+@enduml

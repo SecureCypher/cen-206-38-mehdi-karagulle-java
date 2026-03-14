@@ -1,0 +1,189 @@
+// Pet Care Reminder System — UMPLE Domain Model
+// Online editor: https://cruise.umple.org/umpleonline/
+
+class Pet {
+  abstract;
+  isA Serializable;
+  Integer id;
+  String name;
+  String species;
+  Date birthDate;
+  Integer ownerId;
+  String gender;
+  Double weight;
+  String notes;
+  abstract String makeSound();
+  abstract String getIconName();
+}
+
+class Dog {
+  isA Pet;
+  String breed;
+  String makeSound() { return "Hav Hav!"; }
+  String getIconName() { return "dog.png"; }
+}
+
+class Cat {
+  isA Pet;
+  Boolean isIndoor;
+  String makeSound() { return "Miyav!"; }
+  String getIconName() { return "cat.png"; }
+}
+
+class Bird {
+  isA Pet;
+  Boolean canFly;
+  String makeSound() { return "Cik Cik!"; }
+  String getIconName() { return "bird.png"; }
+}
+
+class Reminder {
+  abstract;
+  isA Serializable;
+  Integer id;
+  Integer petId;
+  DateTime scheduledTime;
+  Boolean completed;
+  String description;
+  String priority;
+  abstract Boolean validate();
+  abstract String getReminderType();
+}
+
+class FeedingReminder {
+  isA Reminder;
+  String foodType;
+  Double amount;
+  String getReminderType() { return "FEEDING"; }
+}
+
+class MedicationReminder {
+  isA Reminder;
+  String medicationName;
+  String dosage;
+  String getReminderType() { return "MEDICATION"; }
+}
+
+class VetAppointment {
+  isA Reminder;
+  String vetName;
+  String clinic;
+  String getReminderType() { return "VET_APPOINTMENT"; }
+}
+
+class GroomingReminder {
+  isA Reminder;
+  String groomingType;
+  String getReminderType() { return "GROOMING"; }
+}
+
+class ExerciseReminder {
+  isA Reminder;
+  Integer durationMinutes;
+  String exerciseType;
+  String getReminderType() { return "EXERCISE"; }
+}
+
+class MedicalRecord {
+  isA Serializable;
+  Integer id;
+  Integer petId;
+  Date recordDate;
+  String recordType;
+  String diagnosis;
+  String treatment;
+  String veterinarian;
+}
+
+class User {
+  isA Serializable;
+  Integer id;
+  String username;
+  String passwordHash;
+  String email;
+}
+
+// ── Associations ──
+
+association {
+  1 User owner -- * Pet ownedPets;
+}
+
+association {
+  1 Pet pet -- * Reminder reminders;
+}
+
+association {
+  1 Pet pet -- * MedicalRecord medicalHistory;
+}
+
+// ── Observer Pattern ──
+
+interface PetReminderObserver {
+  void onEvent(String eventType, Object data);
+}
+
+class EventManager {
+  singleton;
+  void subscribe(String eventType, PetReminderObserver observer);
+  void unsubscribe(String eventType, PetReminderObserver observer);
+  void notify(String eventType, Object data);
+}
+
+// ── Repository Pattern ──
+
+interface IRepository {
+  Integer save(Object entity);
+  Object findById(Integer id);
+  Object[] findAll();
+  Boolean update(Object entity);
+  Boolean delete(Integer id);
+  void deleteAll();
+  Integer count();
+  void close();
+}
+
+class RepositoryFactory {
+  singleton;
+  depend StorageConfig;
+  static IRepository createPetRepository();
+  static IRepository createReminderRepository();
+  static IRepository createUserRepository();
+  static IRepository createMedicalRecordRepository();
+}
+
+// ── Service Layer ──
+
+class PetService {
+  depend IRepository;
+  depend EventManager;
+  Pet addPet(Pet pet);
+  Pet getPetById(Integer id);
+  Pet[] getAllPets();
+  void updatePet(Pet pet);
+  void deletePet(Integer id);
+  Pet[] searchByName(String name);
+  Pet[] filterBySpecies(String species);
+}
+
+class ReminderService {
+  depend IRepository;
+  depend EventManager;
+  Reminder addReminder(Reminder reminder);
+  Reminder[] getRemindersForPet(Integer petId);
+  void completeReminder(Integer id);
+}
+
+class MedicalRecordService {
+  depend IRepository;
+  MedicalRecord addRecord(MedicalRecord record);
+  MedicalRecord[] getRecordsForPet(Integer petId);
+}
+
+// ── Config ──
+
+class StorageConfig {
+  String activeBackend;
+  static String getActiveBackend();
+  static void setActiveBackend(String type);
+}
