@@ -23,10 +23,14 @@
 		<name>petreminder Application</name>
 		<src>images/logo.png</src>
 		<href>https://github.com/SecureCypher/cen-206-38-mehdi-karagulle-java</href>
+		<width>300</width>
+		<height>300</height>
 	</bannerLeft>
 
 	<bannerRight>
 		<src>images/rteu_logo.jpg</src>
+		<width>300</width>
+		<height>300</height>
 	</bannerRight>
 
 	<poweredBy>
